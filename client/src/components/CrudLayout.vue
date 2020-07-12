@@ -1,0 +1,80 @@
+<template>
+    <div>
+        <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
+            <div class="row">
+                <slot name="stats"></slot>
+            </div>
+        </base-header>
+
+        <div class="container-fluid mt--7">
+            <div class="row">
+                <div class="col-12">
+                    <card header-class="bg-transparent">
+                        <div class="float-left">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="ni ni-zoom-split-in"></i>
+                                    </span>
+                                </div>
+                                <input type="text" v-model="query" class="form-control" placeholder="Cari..." @keyup="searchData()">
+                            </div>
+                        </div>
+                        <base-button class="float-right mb-3" type="success" @click="modals = true">
+                            <i class="ni ni-fat-add"></i>
+                            Tambah Data
+                        </base-button>
+                        <table class="table tablesorter">
+                            <thead>
+                                <tr>
+                                    <th class="font-weight-black" v-for="column in columns" :key="column">
+                                        {{ column }}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <slot name="table-rows"></slot>
+                            </tbody>
+                        </table>
+                    </card>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <modal :show.sync="modals">
+
+            <component :is="formComponent" :formRecord="formRecord"></component>
+
+            <template slot="footer">
+                <base-button type="primary">Save changes</base-button>
+                <base-button type="link" class="ml-auto" @click="modals = false">Close
+                </base-button>
+            </template>
+        </modal>
+
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: ['columns', 'modelName', 'formComponent', 'formRecord'],
+
+    data: () => ({
+        query: '',
+        modals: false,
+    }),
+
+    methods: {
+        modal() {
+            this.showModal ? this.showModal = false : this.showModal = true
+        },
+
+        searchData() {
+            console.log(this.query)
+        }
+    }
+}
+</script>

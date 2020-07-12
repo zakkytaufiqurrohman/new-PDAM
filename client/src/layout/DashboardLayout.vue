@@ -2,8 +2,8 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <side-bar
       :background-color="sidebarBackground"
-      short-title="Argon"
-      title="Argon"
+      short-title="PDAM"
+      title="PDAM"
     >
       <template slot="links">
         <sidebar-item
@@ -11,6 +11,13 @@
             name: 'Dashboard',
             icon: 'ni ni-tv-2 text-primary',
             path: '/dashboard'
+          }"
+        />
+        <sidebar-item
+          :link="{
+            name: 'Pelanggan',
+            icon: 'ni ni-single-02 text-primary',
+            path: '/customers'
           }"
         />
 
@@ -49,7 +56,7 @@
     },
     data() {
       return {
-        sidebarBackground: 'vue' //vue|blue|orange|green|red|primary
+        sidebarBackground: 'vue', //vue|blue|orange|green|red|primary
       };
     },
     methods: {
