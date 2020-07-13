@@ -27,30 +27,18 @@ export default new Router({
         {
           path: 'customers',
           name: 'Customers',
-          component: () => import('./views/Customers.vue'),
+          component: () => import(/* webpackChunkName: "demo" */ './views/Customers.vue'),
           meta: {
             requiresAuth: true,
           }
         },
         {
-          path: '/icons',
-          name: 'icons',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Icons.vue')
-        },
-        {
-          path: '/profile',
-          name: 'profile',
-          component: () => import(/* webpackChunkName: "demo" */ './views/UserProfile.vue')
-        },
-        {
-          path: '/maps',
-          name: 'maps',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Maps.vue')
-        },
-        {
-          path: '/tables',
-          name: 'tables',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Tables.vue')
+          path: 'profile',
+          name: 'Profile',
+          component: () => import(/* webpackChunkName: "demo" */ './views/UserProfile.vue'),
+          meta: {
+            requiresAuth: true,
+          }
         }
       ]
     },

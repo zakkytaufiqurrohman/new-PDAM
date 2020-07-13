@@ -24,19 +24,21 @@
                             <i class="ni ni-fat-add"></i>
                             Tambah Data
                         </base-button>
-                        <table class="table tablesorter">
-                            <thead>
-                                <tr>
-                                    <th class="font-weight-black" v-for="column in columns" :key="column">
-                                        {{ column }}
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <slot name="table-rows"></slot>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table tablesorter">
+                                <thead>
+                                    <tr>
+                                        <th class="font-weight-black" v-for="column in columns" :key="column">
+                                            {{ column }}
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <slot name="table-rows"></slot>
+                                </tbody>
+                            </table>
+                        </div>
                     </card>
                 </div>
             </div>
@@ -75,6 +77,11 @@ export default {
         searchData() {
             console.log(this.query)
         }
+    },
+
+    mounted() {
+        console.log(process.env.VUE_APP_NAME)
+        console.log(process.env.VUE_APP_API_URL)
     }
 }
 </script>
