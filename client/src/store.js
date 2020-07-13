@@ -3,6 +3,15 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+// const getUrlName = (string) => {
+//     return string.toString().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+// }
+
+// const getMutationName = (string) => {
+//     let mutation = string.toString().charAt(0).toUpperCase() + string.toString().slice(1)
+//     return `set${mutation}`
+// }
+
 const store = new Vuex.Store({
     state: {
         // users: [],
