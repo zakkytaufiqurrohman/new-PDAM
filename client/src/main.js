@@ -4,9 +4,12 @@ import router from './router'
 import { store } from './store'
 import './registerServiceWorker'
 import ArgonDashboard from './plugins/argon-dashboard'
+import Axios from 'axios'
 
 Vue.config.productionTip = false
 
+//setting base url for axios
+Axios.defaults.baseURL = process.env.VUE_APP_API_URL
 
 Vue.component('crud-layout', require('./components/CrudLayout.vue').default)
 
