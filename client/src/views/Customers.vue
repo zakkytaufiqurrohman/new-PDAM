@@ -20,6 +20,28 @@
                     </template>
                 </stats-card>
             </div>
+            <template slot="table-rows">
+                <tr v-for="customer in customers" :key="customer.id">
+                    <td>
+                        {{ customer.data.name}}
+                    </td>
+                    <td>
+                        {{ customer.data.code}}
+                    </td>
+                    <td>
+                        {{ customer.data.name }}
+                    </td>
+                    <td>
+                        {{ customer.data.phone}}
+                    </td>
+                    <td>
+                        {{ customer.data.user.name}}
+                    </td>
+                    <td>
+                        {{customer.data.address}}
+                    </td>
+                </tr>
+            </template>
 
 
         </crud-layout>        
@@ -29,6 +51,7 @@
 <script>
 import CustomerForm from '../forms/CustomerForm'
 import { Form } from 'vform'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data: () => ({
@@ -42,7 +65,20 @@ export default {
             address: '',
         }),
         formComponent: CustomerForm,
-        modelName: 'customers'
-    })
+        modelName: 'getAllCustomer'
+    }),
+    methods: {
+        ...mapActions({
+            fetchData : 'fetchData'
+        })
+    },
+    created() {
+        this.fetchData(this.modelName)
+    },
+    computed: {
+        ...mapGetters({
+            customers: 'customers'
+        })
+    }
 }
 </script>

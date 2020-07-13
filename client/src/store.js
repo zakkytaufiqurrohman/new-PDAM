@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         // users: [],
-        // customers: [],
+        customers: [],
         // transactions: [],
         // spends: [],
     },
@@ -25,9 +26,9 @@ const store = new Vuex.Store({
             
         // },
 
-        // setCustomers(state, data) {
-
-        // },
+        setCustomers(state, data) {
+            state.customers = data
+        },
 
         // setTransactions(state, data) {
 
@@ -39,9 +40,11 @@ const store = new Vuex.Store({
     },
 
     actions: {
-        // fetchData(context, args) {
-
-        // },
+        fetchData({commit}, context) {
+            axios.get(context).then( (res) => {
+                commit('setCustomers',res.data.data)
+            })
+        },
 
         // createData(context, args) {
 
@@ -61,7 +64,7 @@ const store = new Vuex.Store({
     },
 
     getters: {
-
+        customers : state => state.customers
     }
 })
 
