@@ -24,7 +24,7 @@
                             <i class="ni ni-fat-add"></i>
                             Tambah Data
                         </base-button>
-                        <table class="table tablesorter">
+                        <table class="table table-responsive tablesorter">
                             <thead>
                                 <tr>
                                     <th class="font-weight-black" v-for="column in columns" :key="column">
