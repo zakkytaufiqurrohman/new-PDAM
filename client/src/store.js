@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
+axios.defaults.baseURL = process.env.VUE_APP_API_URL
+
 Vue.use(Vuex)
 
 // const getUrlName = (string) => {
