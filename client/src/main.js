@@ -11,8 +11,6 @@ Vue.config.productionTip = false
 //setting base url for axios
 Axios.defaults.baseURL = process.env.VUE_APP_API_URL
 
-Vue.component('crud-layout', require('./components/CrudLayout.vue').default)
-
 Vue.use(ArgonDashboard)
 new Vue({
   store,
