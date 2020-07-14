@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+
 export default {
     props: ['columns', 'modelName', 'formComponent', 'formRecord'],
 
@@ -70,6 +72,16 @@ export default {
     }),
 
     methods: {
+        fetchData() {
+            this.$store.dispatch('fetchData', this.modelName).catch(() => {
+                Swal.fire(
+                    'Error',
+                    'Gagal loading data',
+                    'error'
+                )
+            })
+        },
+
         modal() {
             this.showModal ? this.showModal = false : this.showModal = true
         },
@@ -80,8 +92,7 @@ export default {
     },
 
     mounted() {
-        console.log(process.env.VUE_APP_NAME)
-        console.log(process.env.VUE_APP_API_URL)
+        this.fetchData()
     }
 }
 </script>
