@@ -60,6 +60,13 @@ const store = new Vuex.Store({
                         context.commit(getMutationName(args), res.data.data)
                         resolve(res)
                     })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+            // axios.get(context).then( (res) => {
+            //     commit('setCustomers',res.data.data)
+            // })
         },
 
         // createData(context, args) {
