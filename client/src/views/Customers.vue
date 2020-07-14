@@ -21,15 +21,15 @@
                 </stats-card>
             </div>
             <template slot="table-rows">
-                <tr v-for="customer in customers" :key="customer.id">
+                <tr v-for="(customer, index) in customers" :key="customer.id">
                     <td>
-                        {{ customer.data.name}}
+                        {{ index }}
                     </td>
                     <td>
                         {{ customer.data.code}}
                     </td>
                     <td>
-                        {{ customer.data.name }}
+                        {{ customer.data.name}}
                     </td>
                     <td>
                         {{ customer.data.phone}}
@@ -39,6 +39,13 @@
                     </td>
                     <td>
                         {{customer.data.address}}
+                    </td>
+                    <td>
+                        <action-button 
+                            :formRecord="form"
+                            :record="customer"
+                            :modelName="modelName"
+                        />
                     </td>
                 </tr>
             </template>
@@ -51,7 +58,7 @@
 <script>
 import CustomerForm from '../forms/CustomerForm'
 import { Form } from 'vform'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
     data: () => ({
@@ -65,16 +72,16 @@ export default {
             address: '',
         }),
         formComponent: CustomerForm,
-        modelName: 'getAllCustomer'
+        modelName: 'customers'
     }),
-    methods: {
-        ...mapActions({
-            fetchData : 'fetchData'
-        })
-    },
-    created() {
-        this.fetchData(this.modelName)
-    },
+    // methods: {
+    //     ...mapActions({
+    //         fetchData : 'fetchData'
+    //     })
+    // },
+    // created() {
+    //     this.fetchData(this.modelName)
+    // },
     computed: {
         ...mapGetters({
             customers: 'customers'

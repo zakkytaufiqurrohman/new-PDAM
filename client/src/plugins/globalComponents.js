@@ -17,9 +17,13 @@ import StatsCard from "../components/StatsCard";
 import Modal from "../components/Modal";
 import TabPane from "../components/Tabs/TabPane";
 import Tabs from "../components/Tabs/Tabs";
+import CrudLayout from '../components/CrudLayout';
+import ActionButton from '../components/ActionButton';
 
 export default {
   install(Vue) {
+    Vue.component('crud-layout', CrudLayout);
+    Vue.component('action-button', ActionButton);
     Vue.component(Badge.name, Badge);
     Vue.component(BaseAlert.name, BaseAlert);
     Vue.component(BaseButton.name, BaseButton);
