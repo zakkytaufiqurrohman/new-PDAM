@@ -14,6 +14,7 @@ Axios.defaults.baseURL = process.env.VUE_APP_API_URL
 Vue.use(ArgonDashboard)
 new Vue({
   store,
+  axios: Axios,
   router,
   render: h => h(App)
 }).$mount('#app')
