@@ -77,9 +77,18 @@ const store = new Vuex.Store({
 
         // },
 
-        // destroyData(context, args) {
-
-        // },
+        destroyData(context, args) {
+            return new Promise((resolve, reject) => {
+                axios.delete(getUrlName(args.model) + '/' + args.id)
+                    .then(res => {
+                        context.dispatch('fetchData', args.model)
+                        resolve(res)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        },
 
         // fetchRecord(context, args) {
 
