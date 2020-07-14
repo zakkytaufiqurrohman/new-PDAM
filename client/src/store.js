@@ -48,10 +48,18 @@ const store = new Vuex.Store({
     },
 
     actions: {
-        fetchData({commit}, context) {
-            axios.get(context).then( (res) => {
-                commit('setCustomers',res.data.data)
-            })
+        fetchData(context, args) {
+            // args is the modelName using the camelCase
+            // example: userTransactions, customers
+            // create new promise
+            return new Promise((resolve, reject) => {
+                // fetch data using default api base url and url name based on actions arguments then convert to url with getUrlName variable funct
+                axios.get(getUrlName(args))
+                    .then(res => {
+                        // commit mutations from getMutationName with fetchData argument
+                        context.commit(getMutationName(args), res.data.data)
+                        resolve(res)
+                    })
         },
 
         // createData(context, args) {
