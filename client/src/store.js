@@ -6,14 +6,20 @@ axios.defaults.baseURL = process.env.VUE_APP_API_URL
 
 Vue.use(Vuex)
 
-// const getUrlName = (string) => {
-//     return string.toString().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
-// }
+/* convert camelCase to kebab case
 
-// const getMutationName = (string) => {
-//     let mutation = string.toString().charAt(0).toUpperCase() + string.toString().slice(1)
-//     return `set${mutation}`
-// }
+example: userTransaction => /user-transactions, customers => /customers */
+const getUrlName = (string) => {
+    return '/' + string.toString().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+}
+
+/*  change first character of function arguments to uppercase and add 'set' before the first char
+
+example: userTransactions => setUserTransactions, customers => setCustomers */
+const getMutationName = (string) => {
+    let mutation = string.toString().charAt(0).toUpperCase() + string.toString().slice(1)
+    return `set${mutation}`
+}
 
 const store = new Vuex.Store({
     state: {
