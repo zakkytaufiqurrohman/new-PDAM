@@ -1,6 +1,6 @@
 <template>
     <div>
-        <base-button type="warning">
+        <base-button type="warning" @click="editButtonAction()">
             <i class="ni ni-active-40"></i>
         </base-button>
         <base-button @click="deleteButtonAction()">
@@ -17,10 +17,17 @@ export default {
     props: [
         'modelName',
         'formRecord',
-        'record'
+        'record',
+        'modals'
     ],
 
     methods: {
+        editButtonAction() {
+            this.$store.commit('setIsEditing', true)
+            this.$store.commit('setModals')
+            // this.formRecord.fill(record)
+        },
+
         deleteButtonAction() {
             this.$store.dispatch('destroyData', {
                 model: this.modelName,
