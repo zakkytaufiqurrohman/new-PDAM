@@ -27,9 +27,19 @@ const store = new Vuex.Store({
         customers: [],
         // transactions: [],
         // spends: [],
+        modals: false,
+        isEditing: false,
     },
 
     mutations: {
+        setModals(state) {
+            state.modals ? state.modals = false : state.modals = true
+        },
+
+        setIsEditing(state, data) {
+            state.isEditing = data
+        },
+
         // setUsers(state, data) {
             
         // },
