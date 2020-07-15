@@ -20,7 +20,7 @@
                                 <input type="text" v-model="query" class="form-control" placeholder="Cari..." @keyup="searchData()">
                             </div>
                         </div>
-                        <base-button class="float-right mb-3" type="success" @click="modals = true">
+                        <base-button class="float-right mb-3" type="success" @click="launchCreateForm">
                             <i class="ni ni-fat-add"></i>
                             Tambah Data
                         </base-button>
@@ -45,13 +45,13 @@
         </div>
 
         <div>
-            <modal :show.sync="modals">
+            <modal :show.sync="$store.state.modals">
 
             <component :is="formComponent" :formRecord="formRecord"></component>
 
             <template slot="footer">
                 <base-button type="primary">Save changes</base-button>
-                <base-button type="link" class="ml-auto" @click="modals = false">Close
+                <base-button type="link" class="ml-auto" @click="$store.commit('setModals')">Close
                 </base-button>
             </template>
         </modal>
@@ -68,7 +68,6 @@ export default {
 
     data: () => ({
         query: '',
-        modals: false,
     }),
 
     methods: {
@@ -82,8 +81,9 @@ export default {
             })
         },
 
-        modal() {
-            this.showModal ? this.showModal = false : this.showModal = true
+        launchCreateForm() {
+            this.$store.commit('setIsEditing', false)
+            this.$store.commit('setModals')
         },
 
         searchData() {
