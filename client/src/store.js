@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
+const formUrl = process.env.VUE_APP_API_URL
 
 Vue.use(Vuex)
 
@@ -23,7 +24,7 @@ const getMutationName = (string) => {
 
 const store = new Vuex.Store({
     state: {
-        // users: [],
+        users: [],
         customers: [],
         // transactions: [],
         // spends: [],
@@ -40,9 +41,9 @@ const store = new Vuex.Store({
             state.isEditing = data
         },
 
-        // setUsers(state, data) {
-            
-        // },
+        setUsers(state, data) {
+            state.users = data.data  
+        },
 
         setCustomers(state, data) {
             state.customers = data
@@ -74,24 +75,40 @@ const store = new Vuex.Store({
                         reject(err)
                     })
             })
-            // axios.get(context).then( (res) => {
-            //     commit('setCustomers',res.data.data)
-            // })
         },
 
-        // createData(context, args) {
+        createData(context, args) {
+            return new Promise((resolve, reject) => {
+                // args.form equal to Form object from main views
+                args.form.post(`${formUrl}${getUrlName(args.modelName)}`)
+                    .then(res => {
+                        context.dispatch('fetchData', args.modelName)
+                        resolve(res)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        },
 
-        // },
-
-        // updateData(context, args) {
-
-        // },
+        updateData(context, args) {
+            return new Promise((resolve, reject) => {
+                args.form.patch(`${formUrl}${getUrlName(args.modelName)}/${args.id}`)
+                    .then(res => {
+                        context.dispatch('fetchData', args.modelName)
+                        resolve(res)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        },
 
         destroyData(context, args) {
             return new Promise((resolve, reject) => {
-                axios.delete(getUrlName(args.model) + '/' + args.id)
+                axios.delete(getUrlName(args.modelName) + '/' + args.id)
                     .then(res => {
-                        context.dispatch('fetchData', args.model)
+                        context.dispatch('fetchData', args.modelName)
                         resolve(res)
                     })
                     .catch(err => {
@@ -106,7 +123,8 @@ const store = new Vuex.Store({
     },
 
     getters: {
-        customers : state => state.customers
+        customers : state => state.customers,
+        users: state => state.users,
     }
 })
 
