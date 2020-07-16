@@ -23,7 +23,7 @@
             <template slot="table-rows">
                 <tr v-for="(customer, index) in customers" :key="customer.id">
                     <td>
-                        {{ index }}
+                        {{ index + 1 }}
                     </td>
                     <td>
                         {{ customer.data.code}}
@@ -66,26 +66,21 @@ export default {
             '#', 'Kode', 'Nama', 'No Hp', 'Diedit Oleh', 'Alamat',
         ],
         form: new Form({
+            id: '',
+            code: '',
             name: '',
             phone: '',
-            edited_by: '',
             address: '',
+            user_id: '',
         }),
         formComponent: CustomerForm,
         modelName: 'customers'
     }),
-    // methods: {
-    //     ...mapActions({
-    //         fetchData : 'fetchData'
-    //     })
-    // },
-    // created() {
-    //     this.fetchData(this.modelName)
-    // },
+
     computed: {
         ...mapGetters({
             customers: 'customers'
         })
-    }
+    },
 }
 </script>
