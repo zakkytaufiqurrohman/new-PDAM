@@ -20,7 +20,6 @@
             path: '/customers'
           }"
         />
-        <sidebar-item :link="{name: 'User Profile', icon: 'ni ni-circle-08 text-yellow', path: '/profile'}"/>
       </template>
     </side-bar>
     <div class="main-content" :data="sidebarBackground">
@@ -58,6 +57,10 @@
           this.$sidebar.displaySidebar(false);
         }
       }
+    },
+
+    mounted() {
+      this.$store.dispatch('getCurrentUser')
     }
   };
 </script>
