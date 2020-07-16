@@ -3,7 +3,7 @@
               id="navbar-main"
               :show-toggle-button="false"
               expand>
-        <ul class="navbar-nav align-items-center navbar-right ml-lg-auto">
+        <ul class="navbar-nav align-items-center navbar-right mr-5 ml-lg-auto">
             <li class="nav-item dropdown">
                 <base-dropdown class="nav-link pr-0">
                     <div class="media align-items-center" slot="title">
@@ -11,7 +11,7 @@
                   <img alt="Image placeholder" src="img/theme/team-4-800x800.jpg">
                 </span>
                         <div class="media-body ml-2 d-none d-lg-block">
-                            <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
+                            <span class="mb-0 text-sm  font-weight-bold">{{user.name}}</span>
                         </div>
                     </div>
 
@@ -28,10 +28,10 @@
                             <span>Settings</span>
                         </router-link>
                         <div class="dropdown-divider"></div>
-                        <router-link to="/profile" class="dropdown-item">
+                        <span @click="logout()" class="dropdown-item">
                             <i class="ni ni-user-run"></i>
                             <span>Logout</span>
-                        </router-link>
+                        </span>
                     </template>
                 </base-dropdown>
             </li>
@@ -39,6 +39,8 @@
     </base-nav>
 </template>
 <script>
+import Swal from 'sweetalert2'
+
   export default {
     data() {
       return {
@@ -56,6 +58,23 @@
       },
       toggleMenu() {
         this.showMenu = !this.showMenu;
+      },
+
+      logout() {
+        this.$store.dispatch('logout').then(() => {
+          Swal.fire(
+            'Success',
+            'Anda telah logout',
+            'success'
+          )
+          this.$router.push({ name: 'auth' })
+        })
+      }
+    },
+
+    computed: {
+      user() {
+        return this.$store.getters.user
       }
     }
   };
