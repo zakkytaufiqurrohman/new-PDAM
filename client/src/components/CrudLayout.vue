@@ -46,11 +46,12 @@
 
         <div>
             <modal :show.sync="$store.state.modals">
-
-            <component :is="formComponent" :formRecord="formRecord"></component>
-
+            
+            <form @submit.prevent="submitForm()">
+                <component :is="formComponent" :formRecord="formRecord"></component>
+            </form>
             <template slot="footer">
-                <base-button type="primary">Save changes</base-button>
+                <base-button type="primary" @click="submitForm()">Save changes</base-button>
                 <base-button type="link" class="ml-auto" @click="$store.commit('setModals')">Close
                 </base-button>
             </template>
@@ -81,7 +82,50 @@ export default {
             })
         },
 
+        submitForm() {
+            if(!this.$store.state.isEditing) {
+                this.$store.dispatch('createData', {
+                    form: this.formRecord,
+                    modelName: this.modelName
+                }).then(() => {
+                    this.$store.commit('setModals')
+                    Swal.fire(
+                        'Sukses',
+                        'Data berhasil diinput',
+                        'success'
+                    )
+                })
+                .catch(() => {
+                    Swal.fire(
+                        'Gagal',
+                        'Data gagal diinput',
+                        'error'
+                    )
+                })
+            } else {
+                this.$store.dispatch('updateData', {
+                    form: this.formRecord,
+                    modelName: this.modelName,
+                    id: this.formRecord.id
+                }).then(() => {
+                    Swal.fire(
+                        'Sukses',
+                        'Data berhasil di update',
+                        'success'
+                    )
+                })
+                .catch(() => {
+                    Swal.fire(
+                        'Gagal',
+                        'Data gagal di update',
+                        'error'
+                    )
+                })
+            }
+        },
+
         launchCreateForm() {
+            this.formRecord.reset()
             this.$store.commit('setIsEditing', false)
             this.$store.commit('setModals')
         },
