@@ -21,11 +21,18 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user', 'AuthController@user');
    
 });
-Route::group(['prefix' => 'customer', 'middleware' => 'auth:api'], function () {
-    Route::get('getAll', 'CustomerController@getAllCustomer');
-    Route::post('insert', 'CustomerController@insert');
-    Route::patch('edit/{id}', 'CustomerController@edit');
-    Route::delete('delete/{id}', 'CustomerController@delete');
-});
+// Route::group(['middleware' => 'auth:api'], function () {
+    // Route::get('getAll', 'CustomerController@getAllCustomer');
+    // Route::post('insert', 'CustomerController@insert');
+    // Route::patch('edit/{id}', 'CustomerController@edit');
+    // Route::delete('delete/{id}', 'CustomerController@delete');
+
+    Route::get('customers', 'CustomerController@getAllCustomer');
+    Route::post('customers', 'CustomerController@insert');
+    Route::patch('customers/{id}', 'CustomerController@edit');
+    Route::delete('customers/{id}', 'CustomerController@delete');
+
+    Route::get('users', 'UserController@index');
+// });
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
