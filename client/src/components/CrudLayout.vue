@@ -51,7 +51,7 @@
                 <component :is="formComponent" :formRecord="formRecord"></component>
             </form>
             <template slot="footer">
-                <base-button type="primary" @click="submitForm()">Save changes</base-button>
+                <base-button type="primary" :disabled="isDisabled" @click="submitForm()">Save changes</base-button>
                 <base-button type="link" class="ml-auto" @click="$store.commit('setModals')">Close
                 </base-button>
             </template>
@@ -63,31 +63,29 @@
 
 <script>
 import Swal from 'sweetalert2'
+// import { mapMutations, mapActions } from 'vuex'
 
 export default {
     props: ['columns', 'modelName', 'formComponent', 'formRecord'],
 
     data: () => ({
         query: '',
+        isDisabled: false,
     }),
 
     methods: {
         fetchData() {
-            this.$store.dispatch('fetchData', this.modelName).catch(() => {
-                Swal.fire(
-                    'Error',
-                    'Gagal loading data',
-                    'error'
-                )
-            })
+            this.$store.dispatch('fetchData', this.modelName)
         },
 
         submitForm() {
+            this.isDisabled = true
             if(!this.$store.state.isEditing) {
                 this.$store.dispatch('createData', {
                     form: this.formRecord,
                     modelName: this.modelName
                 }).then(() => {
+                    this.isDisabled = true
                     this.$store.commit('setModals')
                     Swal.fire(
                         'Sukses',
@@ -96,6 +94,7 @@ export default {
                     )
                 })
                 .catch(() => {
+                    this.isDisabled = false
                     Swal.fire(
                         'Gagal',
                         'Data gagal diinput',
@@ -108,6 +107,7 @@ export default {
                     modelName: this.modelName,
                     id: this.formRecord.id
                 }).then(() => {
+                    this.isDisabled = false
                     Swal.fire(
                         'Sukses',
                         'Data berhasil di update',
@@ -115,6 +115,7 @@ export default {
                     )
                 })
                 .catch(() => {
+                    this.isDisabled = false
                     Swal.fire(
                         'Gagal',
                         'Data gagal di update',
@@ -126,8 +127,8 @@ export default {
 
         launchCreateForm() {
             this.formRecord.reset()
-            this.$store.commit('setIsEditing', false)
             this.$store.commit('setModals')
+            this.$store.commit('setIsEditing', false)
         },
 
         searchData() {
@@ -136,7 +137,7 @@ export default {
     },
 
     mounted() {
-        this.fetchData()
+        this.fetchData(this.modelName)
     }
 }
 </script>
