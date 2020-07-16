@@ -137,7 +137,7 @@ export default {
     },
 
     mounted() {
-        this.fetchData(this.modelName)
+        this.fetchData()
     }
 }
 </script>
