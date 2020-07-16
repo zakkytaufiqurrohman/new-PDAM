@@ -1,9 +1,9 @@
 <template>
     <div>
-        <base-button type="warning" @click="editButtonAction()">
+        <base-button type="primary" @click="editButtonAction()">
             <i class="ni ni-active-40"></i>
         </base-button>
-        <base-button @click="deleteButtonAction()">
+        <base-button type="danger" @click="deleteButtonAction()">
             <i class="ni ni-fat-remove"></i>
         </base-button>
         <slot></slot>
@@ -25,28 +25,40 @@ export default {
         editButtonAction() {
             this.$store.commit('setIsEditing', true)
             this.$store.commit('setModals')
-            // this.formRecord.fill(record)
+            this.formRecord.fill(this.record.data)
         },
 
         deleteButtonAction() {
-            this.$store.dispatch('destroyData', {
-                model: this.modelName,
-                id: this.record.id
+            Swal.fire({
+                title: 'Yakin ingin hapus data?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    this.$store.dispatch('destroyData', {
+                        modelName: this.modelName,
+                        id: this.record.data.id
+                    })
+                        .then(() => {
+                            Swal.fire(
+                                'Sukses',
+                                'Data berhasil dihapus',
+                                'success'
+                            )
+                        })
+                        .catch(() => {
+                            Swal.fire(
+                                'Gagal',
+                                'Data gagal dihapus',
+                                'error'
+                            )
+                        })
+                }
             })
-                .then(() => {
-                    Swal.fire(
-                        'Sukses',
-                        'Data berhasil dihapus',
-                        'success'
-                    )
-                })
-                .catch(() => {
-                    Swal.fire(
-                        'Gagal',
-                        'Data gagal dihapus',
-                        'error'
-                    )
-                })
         }
     }
 }
