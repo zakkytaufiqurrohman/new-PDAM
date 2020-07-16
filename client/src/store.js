@@ -28,6 +28,7 @@ const store = new Vuex.Store({
         customers: [],
         // transactions: [],
         // spends: [],
+        currentUser: {},
         modals: false,
         isEditing: false,
     },
@@ -48,6 +49,10 @@ const store = new Vuex.Store({
         setCustomers(state, data) {
             state.customers = data
         },
+
+        setCurrentUser(state, data) {
+            state.currentUser = data
+        }
 
         // setTransactions(state, data) {
 
@@ -117,14 +122,66 @@ const store = new Vuex.Store({
             })
         },
 
-        // fetchRecord(context, args) {
+        login(context, args) {
+            return new Promise((resolve, reject) => {
+                args.post(formUrl + '/login')
+                    .then(res => {
+                        localStorage.setItem('access_token', res.data.access_token)
+                        resolve(res)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        },
 
-        // }
+        logout(context) {
+            return new Promise((resolve, reject) => {
+                axios.get('/logout', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+                    }
+                })
+                    .then(res => {
+                        localStorage.removeItem('access_token')
+                        context.commit('setCurrentUser', {})
+                        resolve(res)
+                    }) 
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        },
+
+        getCurrentUser(context) {
+            return new Promise((resolve, reject) => {
+                axios.get('/user', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+                    }
+                })
+                    .then(res => {
+                        context.commit('setCurrentUser', res.data)
+                        resolve(res)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        }
     },
 
     getters: {
         customers : state => state.customers,
         users: state => state.users,
+        user: state => state.currentUser,
+        isLoggedIn() {
+            if(localStorage.getItem('access_token') === undefined) {
+                return false
+            }
+
+            return true
+        }
     }
 })
 
