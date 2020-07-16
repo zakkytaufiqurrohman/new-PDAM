@@ -128,4 +128,4 @@ const store = new Vuex.Store({
     }
 })
 
-export { store }
+export default store
