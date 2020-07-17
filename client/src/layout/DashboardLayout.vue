@@ -20,6 +20,13 @@
             path: '/customers'
           }"
         />
+        <sidebar-item
+          :link="{
+            name: 'Users',
+            icon: 'ni ni-circle-08 text-success',
+            path: '/users'
+          }"
+        />
       </template>
     </side-bar>
     <div class="main-content" :data="sidebarBackground">
