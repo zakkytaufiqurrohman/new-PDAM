@@ -3,7 +3,7 @@
         <base-button type="primary" @click="editButtonAction()">
             <i class="ni ni-active-40"></i>
         </base-button>
-        <base-button type="danger" @click="deleteButtonAction()">
+        <base-button type="danger" v-show="buttonState" @click="deleteButtonAction()">
             <i class="ni ni-fat-remove"></i>
         </base-button>
         <slot></slot>
@@ -20,6 +20,18 @@ export default {
         'record',
         'modals'
     ],
+
+    computed: {
+        buttonState() {
+            if(this.modelName === 'users') {
+                if(this.record.data.id === this.$store.state.currentUser.id) {
+                    return false
+                }
+            }
+
+            return true
+        }
+    },
 
     methods: {
         editButtonAction() {
