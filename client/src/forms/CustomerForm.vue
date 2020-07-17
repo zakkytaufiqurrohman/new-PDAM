@@ -48,10 +48,7 @@ export default {
 
     methods: {
         fetchUser() {
-            // this.$store.dispatch('fetchData', 'users')
-            axios.get('users').then(res => {
-                this.$store.commit('setUsers', res)
-            })
+            this.$store.dispatch('fetchData', 'users')
         }
     },
 
