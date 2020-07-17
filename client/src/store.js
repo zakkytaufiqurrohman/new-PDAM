@@ -11,7 +11,7 @@ Vue.use(Vuex)
 
 example: userTransaction => /user-transactions, customers => /customers */
 const getUrlName = (string) => {
-    return '/' + string.toString().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+    return string.toString().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 }
 
 /*  change first character of function arguments to uppercase and add 'set' before the first char
@@ -124,7 +124,7 @@ const store = new Vuex.Store({
 
         login(context, args) {
             return new Promise((resolve, reject) => {
-                args.post('/login')
+                args.post('login')
                     .then(res => {
                         localStorage.setItem('access_token', res.data.access_token)
                         resolve(res)
@@ -137,7 +137,7 @@ const store = new Vuex.Store({
 
         logout(context) {
             return new Promise((resolve, reject) => {
-                axios.get('/logout', {
+                axios.get('logout', {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('access_token')
                     }
@@ -155,7 +155,7 @@ const store = new Vuex.Store({
 
         getCurrentUser(context) {
             return new Promise((resolve, reject) => {
-                axios.get('/user', {
+                axios.get('user', {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('access_token')
                     }
