@@ -15,8 +15,8 @@
             v-model="formRecord.phone"
         />
 
-        <base-input alternative="" input-classes="form-control-alternative" label="User">
-            <select class="form-control-alternative" v-model="formRecord.user_id">
+        <base-input alternative="" label="User">
+            <select class="form-control form-control-alternative" v-model="formRecord.user_id">
                 <option value="">Pilih User</option>
                 <option v-for="user in users" :key="user.id" :value="user.id">
                     {{ user.name }} &ndash; {{ user.email }}
