@@ -85,7 +85,7 @@ export default {
                     form: this.formRecord,
                     modelName: this.modelName
                 }).then(() => {
-                    this.isDisabled = true
+                    this.isDisabled = false
                     this.$store.commit('setModals')
                     Swal.fire(
                         'Sukses',
@@ -108,6 +108,7 @@ export default {
                     id: this.formRecord.id
                 }).then(() => {
                     this.isDisabled = false
+                    this.$store.commit('setModals')
                     Swal.fire(
                         'Sukses',
                         'Data berhasil di update',
