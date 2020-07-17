@@ -43,7 +43,7 @@ const store = new Vuex.Store({
         },
 
         setUsers(state, data) {
-            state.users = data.data  
+            state.users = data
         },
 
         setCustomers(state, data) {
@@ -182,6 +182,33 @@ const store = new Vuex.Store({
             }
 
             return true
+        },
+        adminUsers(state) {
+            let adminusers = []
+            state.users.forEach(user => {
+                if(user.data.role === 'Admin') {
+                    adminusers.push(user)
+                }
+            })
+            return adminusers
+        },
+        pengelolaUsers(state) {
+            let pengelola = []
+            state.users.forEach(user => {
+                if(user.data.role === 'Pengelola') {
+                    pengelola.push(user)
+                }
+            })
+            return pengelola
+        },
+        pegawaiUsers(state) {
+            let pegawai = []
+            state.users.forEach(user => {
+                if(user.data.role === 'Pegawai') {
+                    pegawai.push(user)
+                }
+            })
+            return pegawai
         }
     }
 })
