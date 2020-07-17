@@ -176,7 +176,8 @@ const store = new Vuex.Store({
         users: state => state.users,
         user: state => state.currentUser,
         isLoggedIn() {
-            if(localStorage.getItem('access_token') === undefined) {
+            let token = localStorage.getItem('access_token')
+            if(token == null || token == "null") {
                 return false
             }
 
