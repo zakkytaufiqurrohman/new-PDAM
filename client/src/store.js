@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
-axios.defaults.baseURL = process.env.VUE_APP_API_URL
-const formUrl = process.env.VUE_APP_API_URL
+// axios.defaults.baseURL = process.env.VUE_APP_API_URL
+// const formUrl = process.env.VUE_APP_API_URL
 
 Vue.use(Vuex)
 
@@ -85,7 +85,7 @@ const store = new Vuex.Store({
         createData(context, args) {
             return new Promise((resolve, reject) => {
                 // args.form equal to Form object from main views
-                args.form.post(`${formUrl}${getUrlName(args.modelName)}`)
+                args.form.post(`${getUrlName(args.modelName)}`)
                     .then(res => {
                         context.dispatch('fetchData', args.modelName)
                         resolve(res)
@@ -98,7 +98,7 @@ const store = new Vuex.Store({
 
         updateData(context, args) {
             return new Promise((resolve, reject) => {
-                args.form.patch(`${formUrl}${getUrlName(args.modelName)}/${args.id}`)
+                args.form.patch(`${getUrlName(args.modelName)}/${args.id}`)
                     .then(res => {
                         context.dispatch('fetchData', args.modelName)
                         resolve(res)
@@ -124,7 +124,7 @@ const store = new Vuex.Store({
 
         login(context, args) {
             return new Promise((resolve, reject) => {
-                args.post(formUrl + '/login')
+                args.post('/login')
                     .then(res => {
                         localStorage.setItem('access_token', res.data.access_token)
                         resolve(res)
