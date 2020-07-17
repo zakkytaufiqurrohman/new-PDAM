@@ -10,7 +10,7 @@ class CustomerController extends Controller
 {
     public function getAllCustomer()
     {
-        $data = Customer::with('user')->paginate(5);
+        $data = Customer::with('user')->paginate(20);
         return CustomerResource::collection($data);
     }
     public function insert(Request $request)
