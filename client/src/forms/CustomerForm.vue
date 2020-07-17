@@ -49,7 +49,7 @@ export default {
     methods: {
         fetchUser() {
             // this.$store.dispatch('fetchData', 'users')
-            axios.get('http://localhost:8000/api/users').then(res => {
+            axios.get('users').then(res => {
                 this.$store.commit('setUsers', res)
             })
         }
