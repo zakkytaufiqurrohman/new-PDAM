@@ -18,8 +18,8 @@
         <base-input alternative="" label="User">
             <select class="form-control form-control-alternative" v-model="formRecord.user_id">
                 <option value="">Pilih User</option>
-                <option v-for="user in users" :key="user.id" :value="user.id">
-                    {{ user.name }} &ndash; {{ user.email }}
+                <option v-for="user in users" :key="user.data.id" :value="user.data.id">
+                    {{ user.data.name }} &ndash; {{ user.data.email }}
                 </option>
             </select>
         </base-input>
@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
     props: ['formRecord'],
 
