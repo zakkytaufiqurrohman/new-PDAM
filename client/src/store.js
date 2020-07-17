@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
-axios.defaults.baseURL = process.env.VUE_APP_API_URL
-const formUrl = process.env.VUE_APP_API_URL
+// axios.defaults.baseURL = process.env.VUE_APP_API_URL
+// const formUrl = process.env.VUE_APP_API_URL
 
 Vue.use(Vuex)
 
@@ -11,7 +11,7 @@ Vue.use(Vuex)
 
 example: userTransaction => /user-transactions, customers => /customers */
 const getUrlName = (string) => {
-    return '/' + string.toString().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+    return string.toString().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 }
 
 /*  change first character of function arguments to uppercase and add 'set' before the first char
@@ -85,7 +85,7 @@ const store = new Vuex.Store({
         createData(context, args) {
             return new Promise((resolve, reject) => {
                 // args.form equal to Form object from main views
-                args.form.post(`${formUrl}${getUrlName(args.modelName)}`)
+                args.form.post(`${getUrlName(args.modelName)}`)
                     .then(res => {
                         context.dispatch('fetchData', args.modelName)
                         resolve(res)
@@ -98,7 +98,7 @@ const store = new Vuex.Store({
 
         updateData(context, args) {
             return new Promise((resolve, reject) => {
-                args.form.patch(`${formUrl}${getUrlName(args.modelName)}/${args.id}`)
+                args.form.patch(`${getUrlName(args.modelName)}/${args.id}`)
                     .then(res => {
                         context.dispatch('fetchData', args.modelName)
                         resolve(res)
@@ -124,7 +124,7 @@ const store = new Vuex.Store({
 
         login(context, args) {
             return new Promise((resolve, reject) => {
-                args.post(formUrl + '/login')
+                args.post('login')
                     .then(res => {
                         localStorage.setItem('access_token', res.data.access_token)
                         resolve(res)
@@ -137,7 +137,7 @@ const store = new Vuex.Store({
 
         logout(context) {
             return new Promise((resolve, reject) => {
-                axios.get('/logout', {
+                axios.get('logout', {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('access_token')
                     }
@@ -155,7 +155,7 @@ const store = new Vuex.Store({
 
         getCurrentUser(context) {
             return new Promise((resolve, reject) => {
-                axios.get('/user', {
+                axios.get('user', {
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('access_token')
                     }
@@ -176,7 +176,8 @@ const store = new Vuex.Store({
         users: state => state.users,
         user: state => state.currentUser,
         isLoggedIn() {
-            if(localStorage.getItem('access_token') === undefined) {
+            let token = localStorage.getItem('access_token')
+            if(token == null || token == "null") {
                 return false
             }
 
