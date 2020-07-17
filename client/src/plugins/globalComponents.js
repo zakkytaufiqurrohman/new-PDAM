@@ -19,9 +19,12 @@ import TabPane from "../components/Tabs/TabPane";
 import Tabs from "../components/Tabs/Tabs";
 import CrudLayout from '../components/CrudLayout';
 import ActionButton from '../components/ActionButton';
+import { HasError, AlertError } from 'vform';
 
 export default {
   install(Vue) {
+    Vue.component(HasError.name, HasError);
+    Vue.component(AlertError.name, AlertError);
     Vue.component('crud-layout', CrudLayout);
     Vue.component('action-button', ActionButton);
     Vue.component(Badge.name, Badge);
