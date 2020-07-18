@@ -10,7 +10,14 @@ class CustomerController extends Controller
 {
     public function getAllCustomer()
     {
-        $data = Customer::with('user')->paginate(20);
+        $search = \Request::get('q');
+        if($search) {
+            $data = Customer::with('user')->where(function($query) use ($search) {
+                $query->where('name', 'LIKE', "%$search%");
+            })->paginate(20);
+        } else {
+            $data = Customer::with('user')->paginate(20);
+        }
         return CustomerResource::collection($data);
     }
     public function insert(Request $request)

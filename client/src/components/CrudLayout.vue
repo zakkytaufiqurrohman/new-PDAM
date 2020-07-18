@@ -39,6 +39,10 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- <div class="card-footer">
+                            <base-pagination perpage="20" :page-count="2" align="end" v-model="pagination.default"></base-pagination>
+                        </div> -->
                     </card>
                 </div>
             </div>
@@ -71,6 +75,9 @@ export default {
     data: () => ({
         query: '',
         isDisabled: false,
+        pagination: {
+            default: 1,
+        }
     }),
 
     methods: {
@@ -133,7 +140,10 @@ export default {
         },
 
         searchData() {
-            console.log(this.query)
+            this.$store.dispatch('searchData', {
+                modelName: this.modelName,
+                query: this.query
+            })
         }
     },
 

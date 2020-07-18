@@ -82,6 +82,19 @@ const store = new Vuex.Store({
             })
         },
 
+        searchData(context, args) {
+            return new Promise((resolve, reject) => {
+                axios.get(getUrlName(args.modelName) + '?q=' + args.query)
+                    .then(res => {
+                        context.commit(getMutationName(args.modelName), res.data.data)
+                        resolve(res)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })      
+        },
+
         createData(context, args) {
             return new Promise((resolve, reject) => {
                 // args.form equal to Form object from main views
