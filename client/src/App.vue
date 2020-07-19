@@ -7,9 +7,5 @@
 
 <script>
 export default {
-  mounted() {
-    this.$store.dispatch('getCurrentUser')
-    
-  }
 }
 </script>

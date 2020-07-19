@@ -65,10 +65,6 @@
         }
       }
     },
-
-    mounted() {
-      this.$store.dispatch('getCurrentUser')
-    }
   };
 </script>
 <style lang="scss">

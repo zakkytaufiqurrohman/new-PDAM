@@ -31,6 +31,7 @@ const store = new Vuex.Store({
         currentUser: {},
         modals: false,
         isEditing: false,
+        token: localStorage.getItem('access_token'),
     },
 
     mutations: {
@@ -52,11 +53,11 @@ const store = new Vuex.Store({
 
         setCurrentUser(state, data) {
             state.currentUser = data
-        }
+        },
 
-        // setTransactions(state, data) {
-
-        // },
+        setToken(state, data) {
+            state.token = data
+        },
 
         // setSpends(state, data) {
 
@@ -135,11 +136,15 @@ const store = new Vuex.Store({
             })
         },
 
-        login(context, args) {
+        login(context , args) {
             return new Promise((resolve, reject) => {
                 args.post('login')
                     .then(res => {
                         localStorage.setItem('access_token', res.data.access_token)
+                        let token = res.data.access_token
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`
+                        context.commit('setToken', res.data.access_token)
+                        context.dispatch('getCurrentUser')
                         resolve(res)
                     })
                     .catch(err => {
@@ -150,11 +155,7 @@ const store = new Vuex.Store({
 
         logout(context) {
             return new Promise((resolve, reject) => {
-                axios.get('logout', {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('access_token')
-                    }
-                })
+                axios.get('logout')
                     .then(res => {
                         localStorage.removeItem('access_token')
                         context.commit('setCurrentUser', {})
@@ -168,11 +169,7 @@ const store = new Vuex.Store({
 
         getCurrentUser(context) {
             return new Promise((resolve, reject) => {
-                axios.get('user', {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('access_token')
-                    }
-                })
+                axios.get('userss')
                     .then(res => {
                         context.commit('setCurrentUser', res.data)
                         resolve(res)
@@ -188,13 +185,9 @@ const store = new Vuex.Store({
         customers : state => state.customers,
         users: state => state.users,
         user: state => state.currentUser,
-        isLoggedIn() {
-            let token = localStorage.getItem('access_token')
-            if(token == null || token == "null") {
-                return false
-            }
-
-            return true
+        isLoggedIn: state => {
+            return state.token !=null && state.token != "null"
+            
         },
         adminUsers(state) {
             let adminusers = []
