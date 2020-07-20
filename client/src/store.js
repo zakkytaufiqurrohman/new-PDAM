@@ -144,8 +144,13 @@ const store = new Vuex.Store({
                         let token = res.data.access_token
                         axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`
                         context.commit('setToken', res.data.access_token)
-                        context.dispatch('getCurrentUser')
-                        resolve(res)
+                        context.dispatch('getCurrentUser').then( () => {
+                            resolve(res)
+                        })
+                        .catch( error =>{
+                            reject(error)
+                        })
+                        
                     })
                     .catch(err => {
                         reject(err)
@@ -169,7 +174,7 @@ const store = new Vuex.Store({
 
         getCurrentUser(context) {
             return new Promise((resolve, reject) => {
-                axios.get('userss')
+                axios.get('users')
                     .then(res => {
                         context.commit('setCurrentUser', res.data)
                         resolve(res)

@@ -64,7 +64,7 @@ import { mapGetters } from 'vuex'
     methods: {
         loginForm() {
             this.$store.dispatch('login', this.form).then(() => {
-                if (Object.keys(this.currentUser).length != 0 && this.isLoggedIn == false ) {
+                if (this.isLoggedIn == true) {
                     Swal.fire(
                         'Success',
                         'Login Berhasil',
@@ -75,10 +75,10 @@ import { mapGetters } from 'vuex'
                 else {
                     Swal.fire(
                         'Gagal',
-                        'Login Gagal',
+                        'Login Gagall',
                         'error'
                     )
-                    this.$router.push({ path: 'login' })
+                    // this.$router.push({ path: 'login' })
                 }
             }).catch(() => {
                 Swal.fire(
