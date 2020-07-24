@@ -26,7 +26,7 @@ const store = new Vuex.Store({
     state: {
         users: [],
         customers: [],
-        // transactions: [],
+        transactions: [],
         // spends: [],
         currentUser: {},
         modals: false,
@@ -52,11 +52,11 @@ const store = new Vuex.Store({
 
         setCurrentUser(state, data) {
             state.currentUser = data
-        }
+        },
 
-        // setTransactions(state, data) {
+        setTransactions(state, data) {
 
-        // },
+        },
 
         // setSpends(state, data) {
 
@@ -64,22 +64,14 @@ const store = new Vuex.Store({
     },
 
     actions: {
-        fetchData(context, args) {
-            // args is the modelName using the camelCase
-            // example: userTransactions, customers
-            // create new promise
-            return new Promise((resolve, reject) => {
-                // fetch data using default api base url and url name based on actions arguments then convert to url with getUrlName variable funct
-                axios.get(getUrlName(args))
-                    .then(res => {
-                        // commit mutations from getMutationName with fetchData argument
-                        context.commit(getMutationName(args), res.data.data)
-                        resolve(res)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
-            })
+        async fetchData(context, args) {
+            await axios.get(getUrlName(args))
+                .then(res => {
+                    context.commit(getMutationName(args), res.data.data)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
         },
 
         searchData(context, args) {
@@ -95,44 +87,26 @@ const store = new Vuex.Store({
             })      
         },
 
-        createData(context, args) {
-            return new Promise((resolve, reject) => {
-                // args.form equal to Form object from main views
-                args.form.post(`${getUrlName(args.modelName)}`)
-                    .then(res => {
-                        context.dispatch('fetchData', args.modelName)
-                        resolve(res)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
-            })
+        async createData(context, args) {
+            await args.form.post(`${getUrlName(args.modelName)}`)
+                .then(() => {
+                    context.dispatch('fetchData', args.modelName)
+                })
         },
 
-        updateData(context, args) {
-            return new Promise((resolve, reject) => {
-                args.form.patch(`${getUrlName(args.modelName)}/${args.id}`)
-                    .then(res => {
-                        context.dispatch('fetchData', args.modelName)
-                        resolve(res)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
-            })
+        async updateData(context, args) {
+            await args.form.patch(`${getUrlName(args.modelName)}/${args.id}`)
+                .then(() => {
+                    context.dispatch('fetchData', args.modelName)
+                })
         },
 
-        destroyData(context, args) {
-            return new Promise((resolve, reject) => {
-                axios.delete(getUrlName(args.modelName) + '/' + args.id)
-                    .then(res => {
-                        context.dispatch('fetchData', args.modelName)
-                        resolve(res)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
-            })
+        async destroyData(context, args) {
+            await axios.delete(getUrlName(args.modelName) + '/' + args.id)
+                .then(() => {
+                    context.dispatch('fetchData', args.modelName)
+                    // resolve(res)
+                })
         },
 
         login(context, args) {
@@ -148,39 +122,30 @@ const store = new Vuex.Store({
             })
         },
 
-        logout(context) {
-            return new Promise((resolve, reject) => {
-                axios.get('logout', {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('access_token')
-                    }
-                })
-                    .then(res => {
-                        localStorage.removeItem('access_token')
-                        context.commit('setCurrentUser', {})
-                        resolve(res)
-                    }) 
-                    .catch(err => {
-                        reject(err)
-                    })
+        async logout(context) {
+            await axios.get('logout', {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('access_token')
+                }
             })
+                .then(() => {
+                    localStorage.removeItem('access_token')
+                    context.commit('setCurrentUser', {})
+                }) 
+                .catch(err => {
+                    console.error(err)
+                })
         },
 
-        getCurrentUser(context) {
-            return new Promise((resolve, reject) => {
-                axios.get('user', {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('access_token')
-                    }
-                })
-                    .then(res => {
-                        context.commit('setCurrentUser', res.data)
-                        resolve(res)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
+        async getCurrentUser(context) {
+            await axios.get('user', {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('access_token')
+                }
             })
+                .then(res => {
+                    context.commit('setCurrentUser', res.data)
+                })
         }
     },
 
@@ -197,31 +162,13 @@ const store = new Vuex.Store({
             return true
         },
         adminUsers(state) {
-            let adminusers = []
-            state.users.forEach(user => {
-                if(user.data.role === 'Admin') {
-                    adminusers.push(user)
-                }
-            })
-            return adminusers
+            return state.users.filter(user => user.data.role.match("Admin"))
         },
         pengelolaUsers(state) {
-            let pengelola = []
-            state.users.forEach(user => {
-                if(user.data.role === 'Pengelola') {
-                    pengelola.push(user)
-                }
-            })
-            return pengelola
+            return state.users.filter(user => user.data.role.match("Pengelola"))
         },
         pegawaiUsers(state) {
-            let pegawai = []
-            state.users.forEach(user => {
-                if(user.data.role === 'Pegawai') {
-                    pegawai.push(user)
-                }
-            })
-            return pegawai
+            return state.users.filter(user => user.data.role.match("Pegawai"))
         }
     }
 })
