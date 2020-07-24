@@ -22,9 +22,16 @@
         />
         <sidebar-item
           :link="{
-            name: 'Users',
-            icon: 'ni ni-circle-08 text-success',
+            name: 'User',
+            icon: 'ni ni-circle-08 text-default',
             path: '/users'
+          }"
+        />
+        <sidebar-item
+          :link="{
+            name: 'Transaksi',
+            icon: 'ni ni-chart-bar-32 text-danger',
+            path: '/transactions'
           }"
         />
       </template>
