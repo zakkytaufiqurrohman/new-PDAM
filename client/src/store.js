@@ -55,7 +55,7 @@ const store = new Vuex.Store({
         },
 
         setTransactions(state, data) {
-
+            state.transactions = data
         },
 
         // setSpends(state, data) {
@@ -151,6 +151,7 @@ const store = new Vuex.Store({
 
     getters: {
         customers : state => state.customers,
+        transactions: state => state.transactions,
         users: state => state.users,
         user: state => state.currentUser,
         isLoggedIn() {
