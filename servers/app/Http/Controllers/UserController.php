@@ -10,13 +10,20 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('customers')->paginate(20);
+        $search = \Request::get('q');
+        if($search) {
+            $users = User::with('customers')->where(function($query) use ($search) {
+                $query->where('name', 'LIKE', "%$search%");
+            })->paginate(20);
+        } else {
+            $users = User::with('customers')->paginate(20);
+        }
         return UserResource::collection($users);
     }
 
     public function handler($data, $model)
     {
-        if(isset($request['password'])) {
+        if(isset($data['password'])) {
             $model->password = bcrypt($data['password']);
         } else {
             $model->password = $model->password;
