@@ -51,7 +51,7 @@
         <div>
             <modal :show.sync="$store.state.modals">
             
-            <form @submit.prevent="submitForm()">
+            <form @submit.prevent="submitForm()" enctype="multipart/form-data">
                 <component :is="formComponent" :formRecord="formRecord"></component>
             </form>
             <template slot="footer">
@@ -86,6 +86,7 @@ export default {
         },
 
         submitForm() {
+            console.log('ini form ',this.formRecord)
             this.isDisabled = true
             if(!this.$store.state.isEditing) {
                 this.$store.dispatch('createData', {

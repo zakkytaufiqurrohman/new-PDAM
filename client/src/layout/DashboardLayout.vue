@@ -27,6 +27,13 @@
             path: '/users'
           }"
         />
+        <sidebar-item
+          :link="{
+            name: 'Pengeluaran',
+            icon: 'ni ni-circle-08 text-success',
+            path: '/spending'
+          }"
+        />
       </template>
     </side-bar>
     <div class="main-content" :data="sidebarBackground">

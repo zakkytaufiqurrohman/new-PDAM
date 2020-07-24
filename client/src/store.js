@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+const objectToFormData = window.objectToFormData
 
 // axios.defaults.baseURL = process.env.VUE_APP_API_URL
 // const formUrl = process.env.VUE_APP_API_URL
@@ -27,7 +28,7 @@ const store = new Vuex.Store({
         users: [],
         customers: [],
         // transactions: [],
-        // spends: [],
+        spends: [],
         currentUser: {},
         modals: false,
         isEditing: false,
@@ -59,9 +60,9 @@ const store = new Vuex.Store({
             state.token = data
         },
 
-        // setSpends(state, data) {
-
-        // }
+        setSpending(state, data) {
+            state.spends = data
+        }
     },
 
     actions: {
@@ -97,15 +98,19 @@ const store = new Vuex.Store({
         },
 
         createData(context, args) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 // args.form equal to Form object from main views
-                args.form.post(`${getUrlName(args.modelName)}`)
+                args.form.submit(`${getUrlName(args.modelName)}`,{
+                    transformRequest: [function (data) {
+                        return objectToFormData(data)
+                    }],
+                })
                     .then(res => {
                         context.dispatch('fetchData', args.modelName)
                         resolve(res)
                     })
                     .catch(err => {
-                        reject(err)
+                        alert(err)
                     })
             })
         },
@@ -190,6 +195,7 @@ const store = new Vuex.Store({
         customers : state => state.customers,
         users: state => state.users,
         user: state => state.currentUser,
+        spends: state => state.spends,
         isLoggedIn: state => {
             return state.token !=null && state.token != "null"
             
