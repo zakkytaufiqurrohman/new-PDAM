@@ -47,11 +47,12 @@
 <script>
 import TransactionForm from '../forms/TransactionForm'
 import { Form } from 'vform'
+import { mapGetters } from 'vuex'
 
 export default {
     data: () => ({
         columns: [
-            '#', 'kode', 'pelanggan', 'user', 'jumlah meteran', 'status', 'dibuat tanggal'
+            '#', 'kode', 'pelanggan', 'user', 'jumlah meteran', 'harga', 'status', 'dibuat tanggal'
         ],
         formComponent: TransactionForm,
         form: new Form({
@@ -64,6 +65,14 @@ export default {
             status: '',
         }),
         modelName: 'transactions',
-    })
+    }),
+
+    computed: {
+        ...mapGetters([
+            'transactions'
+        ])
+    }
+
+
 }
 </script>
