@@ -39,6 +39,14 @@ const routes = [
             }
           },
           {
+            path: 'transactions',
+            name: 'Transactions',
+            component: () => import(/* webpackChunkName: "demo" */'./views/Transactions.vue'),
+            meta: {
+              requiresAuth: true,
+            }
+          },
+          {
             path: 'profile',
             name: 'Profile',
             component: () => import(/* webpackChunkName: "demo" */ './views/UserProfile.vue'),
