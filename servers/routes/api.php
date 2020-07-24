@@ -36,6 +36,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('users', 'UserController@store');
     Route::patch('users/{id}', 'UserController@update');
     Route::delete('users/{id}', 'UserController@destroy');
+
+    Route::post('spending', 'SpendingController@insert');
+    Route::get('spending', 'SpendingController@getSpending');
+    Route::delete('spending/{id}', 'SpendingController@delete');
+    Route::get('zoom/{id}', 'SpendingController@zoom');
 });
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
