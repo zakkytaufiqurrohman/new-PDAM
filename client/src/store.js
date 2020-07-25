@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-const objectToFormData = window.objectToFormData
+// const objectToFormData = window.objectToFormData
 
 // axios.defaults.baseURL = process.env.VUE_APP_API_URL
 // const formUrl = process.env.VUE_APP_API_URL
@@ -98,19 +98,15 @@ const store = new Vuex.Store({
         },
 
         createData(context, args) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 // args.form equal to Form object from main views
-                args.form.submit(`${getUrlName(args.modelName)}`,{
-                    transformRequest: [function (data) {
-                        return objectToFormData(data)
-                    }],
-                })
+                args.form.post(`${getUrlName(args.modelName)}`)
                     .then(res => {
                         context.dispatch('fetchData', args.modelName)
                         resolve(res)
                     })
                     .catch(err => {
-                        alert(err)
+                        reject(err)
                     })
             })
         },
@@ -200,6 +196,7 @@ const store = new Vuex.Store({
             return state.token !=null && state.token != "null"
             
         },
+        isEditing: state => state.isEditing,
         adminUsers(state) {
             let adminusers = []
             state.users.forEach(user => {

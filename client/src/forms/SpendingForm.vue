@@ -11,6 +11,7 @@
             alternative=""
             label="Total"
             placeholder="Total"
+            type="number"
             input-classes="form-control-alternative"
             v-model="formRecord.total"
         />
@@ -21,41 +22,33 @@
             placeholder="Information"
             v-model="formRecord.information"
         />
-         <!-- <base-input 
-            alternative=""
-            label="Nota"
-            type="file"
-            input-classes="form-control-alternative"
-            placeholder="uploda nota / bukti"
-            v-model="formRecord.img"
-            @change="selected"
-        /> -->
+        <!-- todo buat component untuk get img -->
+        <div v-if="isEditing==true" >
+            <img :src=" 'http://pdam.test/img/original/' + formRecord.img" alt="img_edit" width="100" height="100">
+            <br><br>
+        </div>
         <input type="file" name="" id="" @change="selected" >
     </div>
 </template>
-<script src="https://cdn.rawgit.com/cretueusebiu/412715093d6e8980e7b176e9de663d97/raw/aea128d8d15d5f9f2d87892fb7d18b5f6953e952/objectToFormData.js"></script>
 <script>
+import { mapGetters } from 'vuex';
 export default {
     props: ['formRecord'],
-
-    // computed: {
-    //     spend() {
-    //         return this.$store.getters.spend
-    //     }
-    // },
-
     methods: {
-        // fetchSpend() {
-        //     this.$store.dispatch('fetchData', 'spending')
-        // },
         selected(e) {
-            this.formRecord.img = e.target.files[0];
-            console.log(this.formRecord.img);
+            let file = e.target.files[0];
+            this.formRecord.img = file
+            let reader = new FileReader();
+            reader.onloadend = () => {
+                this.formRecord.img = reader.result
+            }
+            reader.readAsDataURL(file)
         }
     },
-
-    // created() {
-    //     this.fetchSpend()
-    // }
+    computed : {
+        ...mapGetters({
+            isEditing : 'isEditing'
+        })
+    }
 }
 </script>
