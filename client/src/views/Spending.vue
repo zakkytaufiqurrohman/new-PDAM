@@ -44,6 +44,9 @@
                         {{spend.data.created_at}}
                     </td>
                     <td>
+                        {{spend.data.updated_at}}
+                    </td>
+                    <td>
                         <action-button 
                             :formRecord="form"
                             :record="spend"
@@ -72,7 +75,7 @@ import axios from 'axios'
 export default {
     data: () => ({
         columns: [
-            '#', 'name', 'Petugas Input', 'Total', 'information', 'Image', 'Created',
+            '#', 'name', 'Petugas Input', 'Total', 'information', 'Image', 'Created', 'Updated',
         ],
         form: new Form({
             id: '',
