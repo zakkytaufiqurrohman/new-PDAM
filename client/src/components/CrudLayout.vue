@@ -86,7 +86,6 @@ export default {
         },
 
         submitForm() {
-            console.log('ini form ',this.formRecord)
             this.isDisabled = true
             if(!this.$store.state.isEditing) {
                 this.$store.dispatch('createData', {
