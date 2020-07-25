@@ -20,24 +20,25 @@ class SpendingController extends Controller
             'name' => 'required',
             'total' => 'required',
             'information' => 'required',
-            'img' => 'required|required|file|image|mimes:jpeg,png,jpg|max:2048'
+            'img' => 'required'
         ]);
-
+      
         DB::beginTransaction();
-        try {    
-            $file = $request->file('img');
-            $name = str_replace(' ', '',$file->getClientOriginalName());
-            $small_thumbnail = time()."_small_".$name;
-            $original = time()."_origin_".$name;
+        try {
+            $rand = rand();
+            $exten = '.' .explode('/', explode(':', substr($request->img, 0, strpos($request->img, ';')))[1])[1];
+            $small_thumbnail = time()."_small_".$rand.$exten;
+            $original = time()."_origin_".$rand.$exten;
+            $img = Image::make($request->img);
+            // tujuan
             $tujuan_thumbnail = 'img/thumbnail';
             $tujuan_original = 'img/original';
-            // resize
-            $img = Image::make($file->getRealPath());
+            //resize
             $img->resize(100, 100, function ($constraint) {
                 $constraint->aspectRatio();
             })->save($tujuan_thumbnail.'/'.$small_thumbnail);
-            $file->move($tujuan_original,$original);
-
+            //upload original size
+            Image::make($request->img)->save($tujuan_original.'/'.$original);
             // store db
             $spending = new Spending;
             $spending->user_id = auth('api')->user()->id;
