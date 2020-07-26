@@ -10,6 +10,9 @@ Axios.defaults.baseURL = process.env.VUE_APP_API_URL
 let token = localStorage.getItem('access_token') 
 Axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`
 Vue.use(ArgonDashboard)
+Vue.filter('currency', (money) => {
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(money)
+})
 Vue.config.productionTip = false
 new Vue({
   store,
