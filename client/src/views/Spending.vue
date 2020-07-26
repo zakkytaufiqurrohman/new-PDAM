@@ -7,16 +7,16 @@
             :formComponent="formComponent"
         >
             <div class="col-lg-4" slot="stats">
-                <stats-card title="Sales"
-                            type="gradient-green"
-                            sub-title="924"
-                            icon="ni ni-money-coins"
-                            class="mb-4 mb-xl-0"
+                <stats-card
+                    type="gradient-green"
+                    :sub-title = totalSpendThisMonth
+                    icon="ni ni-money-coins"
+                    class="mb-4 mb-xl-0"
                 >
-
+                    
                     <template slot="footer">
-                        <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> 5.72%</span>
-                        <span class="text-nowrap">Since last month</span>
+                        <span class="text-nowrap">Pengeluaran bulan ini</span><br>
+                        <span>{{now}}</span>
                     </template>
                 </stats-card>
             </div>
@@ -65,7 +65,6 @@
         </template>      
     </div>
 </template>
-
 <script>
 import SpendingForm from '../forms/SpendingForm'
 import { Form } from 'vform'
@@ -88,13 +87,27 @@ export default {
         modelName: 'spending',
         imgs:'',
         display: false,
-        cursor: ''
+        cursor: '',
+        now : new Date()
     }),
-
     computed: {
         ...mapGetters({
-            spends: 'spends'
-        })
+            spends: 'spends',
+        }),
+        totalSpendThisMonth(){
+            //Get the currentYear and the currentMonth
+            let currentMonth = new Date().getMonth() + 1
+            let currentYear = new Date().getFullYear()
+            let total = this.spends.filter(e => {
+                var [year, month] = e.data.created_at.split('-')
+                return (currentMonth === +month) && (currentYear == year)
+            });
+            var hasil = 0;
+            total.forEach(element => {
+                hasil +=element.data.total
+            });
+            return 'Rp '+hasil.toLocaleString('id-ID')
+        }
     },
     methods: {
         show(id){
@@ -106,7 +119,17 @@ export default {
         },
         change(){
             this.cursor = 'cursor:zoom-in'
-        }
+        },
+        // getTotal(){
+        //     axios.get('spending/month')
+        //         .then( res => {
+        //         return this.total = res.data.data
+        //     })
+        // }
+    },
+    mounted() {
+       
+        
     }
 }
 </script>
