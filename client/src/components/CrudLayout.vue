@@ -51,7 +51,7 @@
         <div>
             <modal :show.sync="$store.state.modals">
             
-            <form @submit.prevent="submitForm()">
+            <form @submit.prevent="submitForm()" enctype="multipart/form-data">
                 <component :is="formComponent" :formRecord="formRecord"></component>
             </form>
             <template slot="footer">

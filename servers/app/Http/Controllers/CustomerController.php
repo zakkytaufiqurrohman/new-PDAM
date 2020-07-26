@@ -22,6 +22,10 @@ class CustomerController extends Controller
     }
     public function insert(Request $request)
     {
+        $status = 'error';
+        $message = '';
+        $data = null;
+        $code = 200;
         $this->validate($request, [
             'code' => 'nullable|unique:customers',
             'name' => 'required|min:3',
@@ -36,11 +40,19 @@ class CustomerController extends Controller
             'user_id' => $request->user_id,
             'address' => $request->address
         ]);
+        if ($data) {
+            $status = 'success';
+            $message = 'insert success';
+            $data = $data;
+        }
+        else {
+            $message = 'insert failed';
+        }
         return Response()->json([
-            'status' => 'success',
-            'message' => 'create customer',
+            'status' => $status,
+            'message' => $message,
             'data' => $data
-        ],200);
+        ], $code);
     }
     public function edit(Request $request, $id)
     {
@@ -48,6 +60,7 @@ class CustomerController extends Controller
         $status = "error";
         $message = '';
         $data = null;
+        $code = 200;
         $this->validate($request, [
             'code' => 'required|unique:customers,code,'.$id,
             'name' => 'required|min:3',
@@ -62,30 +75,32 @@ class CustomerController extends Controller
             $data->phone = $request->phone;
             $data->user_id = $request->user_id;
             $data->address = $request->address;
-            if ($data->save) {
+            if ($data->save()) {
                 $status = 'success';
                 $message = 'edit customer success';
                 $data = $data;
             }
             else {
                 $message = 'edit failed';
+                $code = 400;
             }
         }
         else {
             $message = 'user not found';
+            $code = 404;
         }
         return Response()->json([
             'status' => $status,
             'message' => $message,
             'data' => $data
-        ],200);
+        ], $code);
     }
     public function delete($id)
     {
         $status = '';
         $message = 'error';
         $data = null;
-
+        $code = 200;
         $customers = Customer::find($id);
         if ($customers) {
             if ($customers->delete()) {
@@ -95,15 +110,17 @@ class CustomerController extends Controller
             }
             else {
                 $message = 'delete failed';
+                $code = 400;
             }
         }
         else {
             $message = 'user not found';
+            $code = 404;
         }
         return Response()->json([
             'status' => $status,
             'message' => $message,
             'data' => $data
-        ],200);
+        ], $code);
     }
 }

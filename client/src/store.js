@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+// const objectToFormData = window.objectToFormData
 
 // axios.defaults.baseURL = process.env.VUE_APP_API_URL
 // const formUrl = process.env.VUE_APP_API_URL
@@ -27,10 +28,11 @@ const store = new Vuex.Store({
         users: [],
         customers: [],
         transactions: [],
-        // spends: [],
+        spends: [],
         currentUser: {},
         modals: false,
         isEditing: false,
+        token: localStorage.getItem('access_token'),
     },
 
     mutations: {
@@ -58,9 +60,13 @@ const store = new Vuex.Store({
             state.transactions = data
         },
 
-        // setSpends(state, data) {
+        setToken(state, data) {
+            state.token = data
+        },
 
-        // }
+        setSpending(state, data) {
+            state.spends = data
+        }
     },
 
     actions: {
@@ -109,12 +115,21 @@ const store = new Vuex.Store({
                 })
         },
 
-        login(context, args) {
+        login(context , args) {
             return new Promise((resolve, reject) => {
                 args.post('login')
                     .then(res => {
                         localStorage.setItem('access_token', res.data.access_token)
-                        resolve(res)
+                        let token = res.data.access_token
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`
+                        context.commit('setToken', res.data.access_token)
+                        context.dispatch('getCurrentUser').then( () => {
+                            resolve(res)
+                        })
+                        .catch( error =>{
+                            reject(error)
+                        })
+                        
                     })
                     .catch(err => {
                         reject(err)
@@ -122,27 +137,35 @@ const store = new Vuex.Store({
             })
         },
 
-        async logout(context) {
-            await axios.get('logout', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('access_token')
-                }
+        logout(context) {
+            return new Promise((resolve, reject) => {
+                axios.get('logout')
+                    .then(res => {
+                        localStorage.removeItem('access_token')
+                        context.commit('setCurrentUser', {})
+                        resolve(res)
+                    }) 
+                    .catch(err => {
+                        reject(err)
+                    })
             })
-                .then(() => {
-                    localStorage.removeItem('access_token')
-                    context.commit('setCurrentUser', {})
-                }) 
-                .catch(err => {
-                    console.error(err)
-                })
         },
 
         async getCurrentUser(context) {
-            await axios.get('user', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('access_token')
-                }
-            })
+            // return new Promise((resolve, reject) => {
+            //     axios.get('users')
+            //         .then(res => {
+            //             context.commit('setCurrentUser', res.data)
+            //             resolve(res)
+            //         })
+            //         .catch(err => {
+            //             reject(err)
+            //         })
+            // })
+            //     .then(res => {
+            //         context.commit('setCurrentUser', res.data)
+            //     })
+            return await axios.get('users')
                 .then(res => {
                     context.commit('setCurrentUser', res.data)
                 })
@@ -154,14 +177,12 @@ const store = new Vuex.Store({
         transactions: state => state.transactions,
         users: state => state.users,
         user: state => state.currentUser,
-        isLoggedIn() {
-            let token = localStorage.getItem('access_token')
-            if(token == null || token == "null") {
-                return false
-            }
-
-            return true
+        spends: state => state.spends,
+        isLoggedIn: state => {
+            return state.token !=null && state.token != "null"
+            
         },
+        isEditing: state => state.isEditing,
         adminUsers(state) {
             return state.users.filter(user => user.data.role.match("Admin"))
         },

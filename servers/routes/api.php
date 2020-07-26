@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user', 'AuthController@user');
    
 });
-// Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     // Route::get('getAll', 'CustomerController@getAllCustomer');
     // Route::post('insert', 'CustomerController@insert');
     // Route::patch('edit/{id}', 'CustomerController@edit');
@@ -38,6 +38,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('users', 'UserController@store');
     Route::patch('users/{id}', 'UserController@update');
     Route::delete('users/{id}', 'UserController@destroy');
-// });
+
+    Route::post('spending', 'SpendingController@insert');
+    Route::get('spending', 'SpendingController@getSpending');
+    Route::delete('spending/{id}', 'SpendingController@delete');
+    Route::get('zoom/{id}', 'SpendingController@zoom');
+    Route::patch('spending/{id}', 'SpendingController@update');
+});
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');

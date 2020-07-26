@@ -43,7 +43,7 @@
 <script>
 import { Form } from 'vform'
 import Swal from 'sweetalert2'
-
+import { mapGetters } from 'vuex'
   export default {
     name: 'login',
     data() {
@@ -55,16 +55,31 @@ import Swal from 'sweetalert2'
         })
       }
     },
-
+    computed: {
+        ...mapGetters({
+            currentUser: 'user',
+            isLoggedIn: 'isLoggedIn'
+        })
+    },
     methods: {
         loginForm() {
             this.$store.dispatch('login', this.form).then(() => {
-                Swal.fire(
-                    'Success',
-                    'Login Berhhasil',
-                    'success'
-                )
-                this.$router.push({ path: 'dashboard' })
+                if (this.isLoggedIn == true) {
+                    Swal.fire(
+                        'Success',
+                        'Login Berhasil',
+                        'success'
+                    )
+                    this.$router.push({ path: 'dashboard' })
+                }
+                else {
+                    Swal.fire(
+                        'Gagal',
+                        'Login Gagall',
+                        'error'
+                    )
+                    // this.$router.push({ path: 'login' })
+                }
             }).catch(() => {
                 Swal.fire(
                     'Gagal',
