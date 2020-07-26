@@ -16,7 +16,7 @@
                     
                     <template slot="footer">
                         <span class="text-nowrap">Pengeluaran bulan ini</span><br>
-                        <span>{{now}}</span>
+                        <span>{{now.toDateString()}}</span>
                     </template>
                 </stats-card>
             </div>
