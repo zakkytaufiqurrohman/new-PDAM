@@ -5,23 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Spending;
 use App\Http\Resources\SpendingResource;
+use App\Http\Requests\SpendingRequest;
 use Image;
 use DB;
 
 class SpendingController extends Controller
 {
-    public function insert(Request $request)
+    public function insert(SpendingRequest $request)
     {
         $message = '';
         $status = 'error';
         $code = 500;
         $data = null;
-        $this->validate($request, [
-            'name' => 'required',
-            'total' => 'required',
-            'information' => 'required',
-            'img' => 'required'
-        ]);
       
         DB::beginTransaction();
         try {
