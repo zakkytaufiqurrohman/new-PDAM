@@ -24,7 +24,7 @@
                                 <span class="text-muted">Remember me</span>
                             </base-checkbox>
                             <div class="text-center">
-                                <base-button type="primary" @click.prevent="loginForm()" class="my-4">Sign in</base-button>
+                                <base-button :disabled="isDisabled" type="primary" @click.prevent="loginForm()" class="my-4">Sign in</base-button>
                             </div>
                         </form>
                     </div>
@@ -51,8 +51,9 @@ import { mapGetters } from 'vuex'
         form: new Form ({
           email: '',
           password: '',
-          remember_me: false
-        })
+          remember_me: false,
+        }),
+        isDisabled: false,
       }
     },
     computed: {
@@ -63,6 +64,7 @@ import { mapGetters } from 'vuex'
     },
     methods: {
         loginForm() {
+            this.isDisabled = true
             this.$store.dispatch('login', this.form).then(() => {
                 if (this.isLoggedIn == true) {
                     Swal.fire(
@@ -81,6 +83,7 @@ import { mapGetters } from 'vuex'
                     // this.$router.push({ path: 'login' })
                 }
             }).catch(() => {
+                this.isDisabled = false
                 Swal.fire(
                     'Gagal',
                     'Login Gagal',
