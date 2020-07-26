@@ -20,7 +20,7 @@ class SpendingController extends Controller
             'name' => 'required',
             'total' => 'required',
             'information' => 'required',
-            'img' => 'required'
+            'img' => 'required|base64image'
         ]);
       
         DB::beginTransaction();
@@ -62,10 +62,8 @@ class SpendingController extends Controller
         }
         catch(\Exception $e) {
             $message = $e->getMessage();
-            $image_path = $_SERVER['DOCUMENT_ROOT'].'/img/original/'.$original;
-            unlink($image_path);
-            $thumbnail = $_SERVER['DOCUMENT_ROOT'].'/img/thumbnail/'.$small_thumbnail;
-            unlink($thumbnail);
+            $this->deleteImg('/img/original/', $original);
+            $this->deleteImg('/img/original/', $original);
         }
         return Response()->json([
             'status' => $status,
@@ -92,6 +90,8 @@ class SpendingController extends Controller
                 $status = 'success';
                 $message = 'delete success';
                 $data = $speds;
+                $this->deleteImg('/img/original/', $speds->img);
+                $this->deleteImg('/img/thumbnail/', $speds->thumbnail);
             }
             else {
                 $message = 'delete failed';
@@ -125,36 +125,31 @@ class SpendingController extends Controller
             'name' => 'required',
             'total' => 'required',
             'information' => 'required',
-            'img' => 'required'
+            'img' => 'sometimes'
         ]);
+        $spending = Spending::find($id);
         DB::beginTransaction();
         try {
-            $rand = rand();
-            $exten = '.' .explode('/', explode(':', substr($request->img, 0, strpos($request->img, ';')))[1])[1];
-            $small_thumbnail = time()."_small_".$rand.$exten;
-            $original = time()."_origin_".$rand.$exten;
-            $img = Image::make($request->img);
-            // tujuan
-            $tujuan_thumbnail = 'img/thumbnail';
-            $tujuan_original = 'img/original';
-            //resize
-            $img->resize(100, 100, function ($constraint) {
-                $constraint->aspectRatio();
-            })->save($tujuan_thumbnail.'/'.$small_thumbnail);
-            //upload original size
-            Image::make($request->img)->save($tujuan_original.'/'.$original);
-
-            
-            // store db
-            $spending = Spending::find($id);
-            // delete file lama
-            $image_path = $_SERVER['DOCUMENT_ROOT'].'/img/original/'.$spending->img;
-            $thumbnail_path = $_SERVER['DOCUMENT_ROOT'].'/img/thumbnail/'.$spending->thumbnail;
-            if (file_exists($image_path) && 
-                file_exists($thumbnail_path) ) 
-            {
-                unlink($image_path);
-                unlink($thumbnail_path);
+            $original = $spending->img;
+            $small_thumbnail = $spending->thumbnail;
+            if ($request->img != $original) {
+                $rand = rand();
+                $exten = '.' .explode('/', explode(':', substr($request->img, 0, strpos($request->img, ';')))[1])[1];
+                $small_thumbnail = time()."_small_".$rand.$exten;
+                $original = time()."_origin_".$rand.$exten;
+                $img = Image::make($request->img);
+                // tujuan
+                $tujuan_thumbnail = 'img/thumbnail';
+                $tujuan_original = 'img/original';
+                //resize
+                $img->resize(100, 100, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($tujuan_thumbnail.'/'.$small_thumbnail);
+                //upload original size
+                Image::make($request->img)->save($tujuan_original.'/'.$original);
+                // delete file lama
+                $this->deleteImg('/img/original/', $spending->img);
+                $this->deleteImg('/img/thumbnail/', $spending->thumbnail);
             }
             $spending->user_id = auth('api')->user()->id;
             $spending->name = $request->name;
@@ -162,6 +157,7 @@ class SpendingController extends Controller
             $spending->information = $request->information;
             $spending->img = $original;
             $spending->thumbnail = $small_thumbnail;
+
             if ($spending->save()) {
                 DB::commit();
                 $message = 'spending edited';
@@ -175,16 +171,23 @@ class SpendingController extends Controller
             }
         }
         catch(\Exception $e) {
+            
             $message = $e->getMessage();
-            $image_path = $_SERVER['DOCUMENT_ROOT'].'/img/original/'.$original;
-            unlink($image_path);
-            $thumbnail = $_SERVER['DOCUMENT_ROOT'].'/img/thumbnail/'.$small_thumbnail;
-            unlink($thumbnail);
+            $this->deleteImg('/img/original/', $spending->img);
+            $this->deleteImg('/img/thumbnail/', $spending->thumbnail);
+            
         }
         return Response()->json([
             'status' => $status,
             'message' => $message,
             'data' => $data
         ], $code);
+    }
+    private function deleteImg($patch, $name)
+    {
+        $image_path = $_SERVER['DOCUMENT_ROOT'].$patch.$name;
+        if (file_exists($image_path)) {
+            unlink($image_path);
+        }
     }
 }
