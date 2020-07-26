@@ -41,7 +41,6 @@ export default {
     methods: {
         selected(e) {
             const file = e.target.files[0];
-            this.formRecord.img = file
             const reader = new FileReader();
             if(file['size'] < 2111775) {
                 reader.onloadend = () => {
