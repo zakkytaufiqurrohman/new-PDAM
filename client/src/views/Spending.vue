@@ -96,17 +96,14 @@ export default {
         }),
         totalSpendThisMonth(){
             //Get the currentYear and the currentMonth
-            let currentMonth = new Date().getMonth() + 1
-            let currentYear = new Date().getFullYear()
-            let total = this.spends.filter(e => {
-                var [year, month] = e.data.created_at.split('-')
-                return (currentMonth === +month) && (currentYear == year)
+            const currentMonth = this.now.getMonth() + 1
+            const currentYear = this.now.getFullYear()
+            const total = this.spends.filter(e => {
+                const [year, month] = e.data.created_at.split('')
+                return (currentMonth === +month.slice(5, 7).join('') && (currentYear === year.slice(0, 4).join('')))
             });
-            var hasil = 0;
-            total.forEach(element => {
-                hasil +=element.data.total
-            });
-            return 'Rp '+hasil.toLocaleString('id-ID')
+            const hasil = total.reduce((a, b) => a + b, 0)
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(hasil)
         }
     },
     methods: {
