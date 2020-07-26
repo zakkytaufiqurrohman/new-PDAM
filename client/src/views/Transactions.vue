@@ -26,10 +26,19 @@
                     <td>
                         {{ index + 1 }}
                     </td>
+                    <td>{{ transaction.data.code }}</td>
                     <td>{{ transaction.data.customer.code }} &ndash; {{ transaction.data.customer.name }}</td>
                     <td>{{ transaction.data.user.name }}</td>
                     <td>{{ transaction.data.indicator_total }}</td>
-                    <td>{{ transaction.data.status }}</td>
+                    <td>{{ transaction.data.price | currency }}</td>
+                    <td>
+                        <badge tag="a" href="#" v-if="transaction.data.status === 'Dibayar'" type="success">
+                            {{ transaction.data.status }}
+                        </badge>
+                        <badge tag="a" href="#" v-else type="warning">
+                            {{ transaction.data.status }}
+                        </badge>
+                    </td>
                     <td>{{ transaction.data.created_at }}</td>
                     <td>
                         <action-button
