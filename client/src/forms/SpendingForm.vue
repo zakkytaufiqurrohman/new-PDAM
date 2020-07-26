@@ -27,22 +27,34 @@
             <img :src=" 'http://pdam.test/img/original/' + formRecord.img" alt="img_edit" width="100" height="100">
             <br><br>
         </div>
-        <input type="file" name="" id="" @change="selected" >
+        <base-input label="">
+            <input type="file" class="form-control form-control-alternative" name="" id="" @change="selected" >
+        </base-input>
     </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import Swal from 'sweetalert2'
+
 export default {
     props: ['formRecord'],
     methods: {
         selected(e) {
-            let file = e.target.files[0];
+            const file = e.target.files[0];
             this.formRecord.img = file
-            let reader = new FileReader();
-            reader.onloadend = () => {
-                this.formRecord.img = reader.result
+            const reader = new FileReader();
+            if(file['size'] < 2111775) {
+                reader.onloadend = () => {
+                    this.formRecord.img = reader.result
+                }
+                reader.readAsDataURL(file)
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Ukuran Gambar Tidak Boleh Lebih Dari 2MB',
+                    'error'
+                )
             }
-            reader.readAsDataURL(file)
         }
     },
     computed : {
