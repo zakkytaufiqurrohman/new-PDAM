@@ -137,35 +137,19 @@ const store = new Vuex.Store({
             })
         },
 
-        logout(context) {
-            return new Promise((resolve, reject) => {
-                axios.get('logout')
-                    .then(res => {
-                        localStorage.removeItem('access_token')
-                        context.commit('setCurrentUser', {})
-                        resolve(res)
-                    }) 
-                    .catch(err => {
-                        reject(err)
-                    })
-            })
+        async logout(context) {
+            await axios.get('logout')
+                .then(() => {
+                    localStorage.removeItem('access_token')
+                    context.commit('setCurrentUser', {})
+                })
+                .catch(err => {
+                    throw new Error(err)
+                })
         },
 
         async getCurrentUser(context) {
-            // return new Promise((resolve, reject) => {
-            //     axios.get('users')
-            //         .then(res => {
-            //             context.commit('setCurrentUser', res.data)
-            //             resolve(res)
-            //         })
-            //         .catch(err => {
-            //             reject(err)
-            //         })
-            // })
-            //     .then(res => {
-            //         context.commit('setCurrentUser', res.data)
-            //     })
-            return await axios.get('users')
+            await axios.get('user')
                 .then(res => {
                     context.commit('setCurrentUser', res.data)
                 })
