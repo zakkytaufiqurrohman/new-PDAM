@@ -73,7 +73,7 @@ class TransactionController extends Controller
 
     public function destroy($id)
     {
-        $transaction = Transaction::find($id)::delete();
+        $transaction = Transaction::find($id)->delete();
         if($transaction) {
             return response([
                 'message' => 'transaction deleted',
