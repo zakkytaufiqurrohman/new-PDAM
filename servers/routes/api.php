@@ -32,6 +32,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('customers/{id}', 'CustomerController@edit');
     Route::delete('customers/{id}', 'CustomerController@delete');
 
+    Route::get('transactions', 'TransactionController@index');
+    Route::post('transactions', 'TransactionController@store');
+    Route::patch('transactions/{id}', 'TransactionController@update');
+    Route::delete('transactions/{id}', 'TransactionController@destroy');
+
     Route::get('users', 'UserController@index');
     Route::post('users', 'UserController@store');
     Route::patch('users/{id}', 'UserController@update');

@@ -63,7 +63,7 @@ class SpendingController extends Controller
         catch(\Exception $e) {
             $message = $e->getMessage();
             $this->deleteImg('/img/original/', $original);
-            $this->deleteImg('/img/original/', $original);
+            $this->deleteImg('/img/thumbnail/', $small_thumbnail);
         }
         return Response()->json([
             'status' => $status,

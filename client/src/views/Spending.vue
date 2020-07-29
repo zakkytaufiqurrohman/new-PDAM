@@ -16,7 +16,7 @@
                     
                     <template slot="footer">
                         <span class="text-nowrap">Pengeluaran bulan ini</span><br>
-                        <span>{{now}}</span>
+                        <span>{{now.toDateString()}}</span>
                     </template>
                 </stats-card>
             </div>
@@ -95,7 +95,6 @@ export default {
             spends: 'spends',
         }),
         totalSpendThisMonth(){
-            //Get the currentYear and the currentMonth
             let currentMonth = new Date().getMonth() + 1
             let currentYear = new Date().getFullYear()
             let total = this.spends.filter(e => {
