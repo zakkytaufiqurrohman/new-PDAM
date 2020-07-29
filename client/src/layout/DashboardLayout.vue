@@ -37,7 +37,21 @@
         <sidebar-item
           :link="{
             name: 'Pengeluaran',
-            icon: 'ni ni-circle-08 text-success',
+            icon: 'ni ni-send',
+            path: '/spending'
+          }"
+        />
+         <sidebar-item
+          :link="{
+            name: 'Laporan',
+            icon: 'ni ni-badge',
+            path: '/spending'
+          }"
+        />
+         <sidebar-item
+          :link="{
+            name: 'setting',
+            icon: 'ni ni-settings-gear-65',
             path: '/spending'
           }"
         />
