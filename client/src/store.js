@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-// const objectToFormData = window.objectToFormData
-
-// axios.defaults.baseURL = process.env.VUE_APP_API_URL
-// const formUrl = process.env.VUE_APP_API_URL
 
 Vue.use(Vuex)
 
@@ -30,6 +26,7 @@ const store = new Vuex.Store({
         transactions: [],
         spends: [],
         currentUser: {},
+        setting: [],
         modals: false,
         isEditing: false,
         token: localStorage.getItem('access_token'),
@@ -66,6 +63,10 @@ const store = new Vuex.Store({
 
         setSpending(state, data) {
             state.spends = data
+        },
+
+        setSetting(state, data) {
+            state.setting = data
         }
     },
 
@@ -162,6 +163,7 @@ const store = new Vuex.Store({
         users: state => state.users,
         user: state => state.currentUser,
         spends: state => state.spends,
+        setting: state => state.setting,
         isLoggedIn: state => {
             return state.token !=null && state.token != "null"
             
