@@ -1,9 +1,7 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <side-bar
-      :background-color="sidebarBackground"
-      short-title="PDAM"
-      title="PDAM"
+     :logo ="getImage('img/logo', logo.logo)"
     >
       <template slot="links">
         <sidebar-item
@@ -52,7 +50,7 @@
           :link="{
             name: 'setting',
             icon: 'ni ni-settings-gear-65',
-            path: '/spending'
+            path: '/setting'
           }"
         />
       </template>
@@ -74,6 +72,7 @@
   import DashboardNavbar from './DashboardNavbar.vue';
   import ContentFooter from './ContentFooter.vue';
   import { FadeTransition } from 'vue2-transitions';
+import { mapGetters } from 'vuex';
 
   export default {
     components: {
@@ -95,6 +94,12 @@
     },
     mounted() {
       this.$store.dispatch('getCurrentUser')
+      this.$store.dispatch('fetchData', 'setting')
+    },
+    computed: {
+      ...mapGetters({
+        logo : 'setting'
+      })
     }
   };
 </script>
