@@ -47,6 +47,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('spending/{id}', 'SpendingController@delete');
     Route::get('zoom/{id}', 'SpendingController@zoom');
     Route::patch('spending/{id}', 'SpendingController@update');
+
+    Route::get('setting', 'SettingController@index');
+    Route::patch('setting/{id}', 'SettingController@update');
 });
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
+
