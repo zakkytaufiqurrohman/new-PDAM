@@ -1,52 +1,87 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-6">
-                <base-input
+        <div v-if="!isEditing">
+            <base-input
+                alternative=""
+                label="Pelanggan"
+            >
+            <select class="form-control form-control-alternative" v-model="formRecord.customer_id" @change="select($event)" >
+                <option value="">Pilih Pelanggan</option>
+                <option v-for="customer in customers" :key="customer.data.id" :value="customer.data.id">
+                    {{ customer.data.code }} - {{ customer.data.name }}
+                </option>
+            </select>
+            </base-input>
+        
+            <base-input 
+                type="number"
+                alternative=""
+                label="Input Meteran"
+                v-model="formRecord.indicator_total"
+                input-classes="form-control-alternative"
+                placeholder="Masukkan Jumlah Meteran"
+                @keyup="calculate($event)"
+            />
+            <div v-if="transaction.length != 0">
+                <div class="row">
+                    <div class="col-6">
+                        <base-input 
+                            type="text"
+                            alternative=""
+                            label="nama customer"
+                            input-classes="form-control-alternative"
+                            placeholder=""
+                            readonly
+                            v-model="transaction.customer.name"
+                        />
+                    </div>
+                    <div class="col-6">
+                        <base-input 
+                            type="number"
+                            alternative=""
+                            label="jumlah meteran bulan lalu"
+                            input-classes="form-control-alternative"
+                            placeholder=""
+                            readonly
+                            v-model="transaction.indicator_total"
+                        />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <base-input 
+                            type="text"
+                            alternative=""
+                            label="Harga permeter"
+                            input-classes="form-control-alternative"
+                            placeholder=""
+                            readonly
+                            v-model="setting.harga"
+                        />
+                    </div>
+                    <div class="col-6">
+                        <base-input 
+                            type="number"
+                            alternative=""
+                            label="Meteran yang harus dibayar"
+                            input-classes="form-control-alternative"
+                            placeholder=""
+                            readonly
+                            v-model="jmlMeter"
+                        />
+                    </div>
+                </div>
+                <base-input 
+                    type="number"
                     alternative=""
-                    label="Pelanggan"
-                >
-                    <select class="form-control form-control-alternative" v-model="formRecord.customer_id">
-                        <option value="">Pilih Pelanggan</option>
-                        <option v-for="customer in customers" :key="customer.data.id" :value="customer.data.id">
-                            {{ customer.data.code }} - {{ customer.data.name }}
-                        </option>
-                    </select>
-                </base-input>
-            </div>
-            <div class="col-6">
-                <base-input
-                    alternative=""
-                    label="User"
-                >
-                    <select class="form-control form-control-alternative" v-model="formRecord.user_id">
-                        <option value="">Pilih User</option>
-                        <option v-for="user in users" :key="user.data.id" :value="user.data.id">
-                            {{ user.data.role }} - {{ user.data.name }}
-                        </option>
-                    </select>
-                </base-input>
+                    label="Jumlah uang yang harus dibayar"
+                    input-classes="form-control-alternative"
+                    placeholder=""
+                    readonly
+                    v-model="formRecord.price"
+                />
             </div>
         </div>
-
-        <base-input 
-            type="number"
-            alternative=""
-            label="Meteran"
-            v-model="formRecord.indicator_total"
-            input-classes="form-control-alternative"
-            placeholder="Jumlah Meteran"
-        />
-
-        <base-input 
-            type="number"
-            alternative=""
-            v-model="formRecord.price"
-            label="Harga"
-            input-classes="form-control-alternative"
-            placeholder="Harga"
-        />
-
         <base-input 
             alternative=""
             label="Status"
@@ -61,6 +96,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import axios from 'axios'
+
 export default {
     props: [
         'formRecord'
@@ -69,13 +106,28 @@ export default {
     data: () => ({
         status: [
             'Dibayar', 'Belum Dibayar'
-        ]
+        ],
+        transaction : [],
+        jmlMeter : 0,
     }),
 
     methods: {
         fetchFormData() {
             this.$store.dispatch('fetchData', 'customers')
             this.$store.dispatch('fetchData', 'users')
+        },
+        select(event) {
+            axios.get('getTransaction/'+event.target.value)
+                .then( res => {
+                    this.transaction = res.data.data
+                })
+                .catch( err => {
+                    alert(err);
+                })
+        },
+        calculate(event) {
+            this.jmlMeter = parseInt(event.target.value) - parseInt(this.transaction.indicator_total)
+            this.formRecord.price = this.setting.harga * this.jmlMeter
         }
     },
 
@@ -83,6 +135,8 @@ export default {
         ...mapGetters({
             customers: 'customers',
             users: 'users',
+            setting: 'setting',
+            isEditing: 'isEditing'
         })
     },
 
