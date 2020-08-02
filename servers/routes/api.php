@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('transactions', 'TransactionController@store');
     Route::patch('transactions/{id}', 'TransactionController@update');
     Route::delete('transactions/{id}', 'TransactionController@destroy');
+    Route::get('getTransaction/{id}', 'TransactionController@getCustomerTransaction');
 
     Route::get('users', 'UserController@index');
     Route::post('users', 'UserController@store');
@@ -50,6 +51,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('setting', 'SettingController@index');
     Route::patch('setting/{id}', 'SettingController@update');
+
 });
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');

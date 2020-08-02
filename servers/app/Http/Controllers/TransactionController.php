@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Transaction;
+use App\Setting;
+use App\Customer;
 use App\Http\Resources\TransactionResource;
 
 class TransactionController extends Controller
@@ -23,16 +25,14 @@ class TransactionController extends Controller
     {
         $this->validate($request, [
             'customer_id' => 'required',
-            'user_id' => 'required',
             'indicator_total' => 'required',
             'price' => 'required',
             'status' => 'required'
         ]);
-
         $transaction = Transaction::create([
             'code' => rand(999, 9999),
             'customer_id' => $request->customer_id,
-            'user_id' => $request->user_id,
+            'user_id' => auth('api')->user()->id,
             'indicator_total' => $request->indicator_total,
             'price' => $request->price,
             'status' => $request->status,
@@ -80,5 +80,30 @@ class TransactionController extends Controller
                 'status' => 'success'
             ], 204);
         }
+    }
+
+    public function getCustomerTransaction(Request $request)
+    {
+        $data = Transaction::where('customer_id', $request->id)->with('customer')->orderBy('created_at', 'DESC')->first();
+        if (!$data) {
+            $customer = Customer::where('id', $request->id)->first()->attributesToArray();
+            $customer = [
+                'customer' => $customer 
+            ];
+            $temp = [
+                'indicator_total' => 0 
+            ];
+            $temp = array_merge($customer, $temp);
+            return Response()->json([
+                'status' => 'success',
+                'message' => 'getCustomerTransaction',
+                'data' => $temp
+            ]);
+        }
+        return Response()->json([
+            'status' => 'success',
+            'message' => 'getCustomerTransaction',
+            'data' => $data
+        ]);
     }
 }
