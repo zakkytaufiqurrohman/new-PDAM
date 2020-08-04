@@ -106,4 +106,16 @@ class TransactionController extends Controller
             'data' => $data
         ]);
     }
+    public function filterDate($date)
+    {
+        
+        $data = explode(' to ', $date);
+        // dd($data[1]);
+        $transactions = Transaction::whereDate('created_at', '>=', $data[0])
+                                    ->whereDate('created_at', '<=', $data[1])
+                                    ->with('customer')
+                                    ->with('user')
+                                    ->paginate(20);
+        return TransactionResource::collection($transactions);
+    }
 }

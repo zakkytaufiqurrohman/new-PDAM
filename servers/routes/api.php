@@ -37,6 +37,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('transactions/{id}', 'TransactionController@update');
     Route::delete('transactions/{id}', 'TransactionController@destroy');
     Route::get('getTransaction/{id}', 'TransactionController@getCustomerTransaction');
+    Route::get('filterDate/{date}', 'TransactionController@filterDate');
+
 
     Route::get('users', 'UserController@index');
     Route::post('users', 'UserController@store');

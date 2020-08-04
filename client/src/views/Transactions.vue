@@ -20,7 +20,18 @@
                     </template>
                 </stats-card>
             </div>
-
+            <div slot="filter" class="col-md-6">
+                <label>Filer Transaksi</label>
+                <base-input addon-left-icon="ni ni-calendar-grid-58">
+                    <flat-pickr slot-scope="{focus}"
+                        @on-open="focus"
+                        @on-close="filterDate"
+                        :config="{allowInput: true, mode: 'range'}"
+                        class="form-control datepicker"
+                        v-model="dates.range">
+                    </flat-pickr>
+                </base-input>
+            </div>
             <template slot="table-rows">
                 <tr v-for="(transaction, index) in transactions" :key="transaction.id">
                     <td>
@@ -57,6 +68,8 @@
 import TransactionForm from '../forms/TransactionForm'
 import { Form } from 'vform'
 import { mapGetters } from 'vuex'
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
 
 export default {
     data: () => ({
@@ -74,14 +87,26 @@ export default {
             status: '',
         }),
         modelName: 'transactions',
+        dates: {
+            range: new Date()
+        }
     }),
 
     computed: {
         ...mapGetters([
             'transactions'
         ])
-    }
-
-
+    },
+    components: {
+        flatPickr
+    },
+    methods: {
+        filterDate(selectedDates, dateStr) {
+          this.$store.dispatch('filterDate', {
+              modelName: 'filterDate',
+              filter: dateStr
+          })
+        },
+    },
 }
 </script>

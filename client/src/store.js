@@ -93,7 +93,19 @@ const store = new Vuex.Store({
                     })
             })      
         },
-
+        // todo buat component
+        filterDate(context, args) {
+            return new Promise((resolve, reject) => {
+                axios.get(args.modelName +'/'+ args.filter)
+                .then(res => {
+                    context.commit('setTransactions', res.data.data)
+                    resolve(res)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+            })
+        },
         async createData(context, args) {
             await args.form.post(`${getUrlName(args.modelName)}`)
                 .then(() => {
