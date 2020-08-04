@@ -6,18 +6,13 @@
             :formRecord="form"
             :formComponent="formComponent"
         >
-            <div class="col-lg-4" slot="stats">
-                <stats-card title="Sales"
+            <div class="col-lg-5" slot="stats">
+                <stats-card title="Total Pelanggan"
                             type="gradient-green"
-                            sub-title="924"
+                            :sub-title="customers.length"
                             icon="ni ni-money-coins"
                             class="mb-4 mb-xl-0"
                 >
-
-                    <template slot="footer">
-                        <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> 5.72%</span>
-                        <span class="text-nowrap">Since last month</span>
-                    </template>
                 </stats-card>
             </div>
             <template slot="table-rows">
