@@ -6,17 +6,16 @@
             :formRecord="form"
             :formComponent="formComponent"
         >
-            <div class="col-lg-4" slot="stats">
-                <stats-card title="Sales"
+            <div class="col-lg-6" slot="stats">
+                <stats-card title="Transaksi Bulan ini"
                             type="gradient-green"
-                            sub-title="924"
+                            :sub-title="totalSpendThisMonth"
                             icon="ni ni-money-coins"
                             class="mb-4 mb-xl-0"
                 >
-
                     <template slot="footer">
-                        <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> 5.72%</span>
-                        <span class="text-nowrap">Since last month</span>
+                        <span class="text-danger mr-2">{{sumTotalBayar}}</span>
+                        <span class="text-nowrap">Pelanggan Belum Bayar</span>
                     </template>
                 </stats-card>
             </div>
@@ -95,7 +94,23 @@ export default {
     computed: {
         ...mapGetters([
             'transactions'
-        ])
+        ]),
+        totalSpendThisMonth(){
+            var hasil = 0;
+            this.transactions.forEach(element => {
+                hasil +=element.data.price
+            });
+            return 'Rp '+hasil.toLocaleString('id-ID')
+        },
+        sumTotalBayar(){
+            let total = this.transactions.filter(e => {
+                // var [year, month] = e.data.created_at.split('-')
+                // return (currentMonth === +month) && (currentYear == year)
+                return e.data.status == 'Belum Dibayar'
+            });
+
+            return total.length
+        }
     },
     components: {
         flatPickr
