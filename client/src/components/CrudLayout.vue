@@ -4,8 +4,10 @@
             <div class="row">
                 <slot name="stats"></slot>
             </div>
+            <div class="row">
+                <slot name="filter"></slot>
+            </div>
         </base-header>
-
         <div class="container-fluid mt--7">
             <div class="row">
                 <div class="col-12">
