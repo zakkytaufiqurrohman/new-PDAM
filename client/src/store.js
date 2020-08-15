@@ -72,13 +72,13 @@ const store = new Vuex.Store({
 
     actions: {
         async fetchData(context, args) {
-            await axios.get(getUrlName(args))
-                .then(res => {
-                    context.commit(getMutationName(args), res.data.data)
-                })
-                .catch(err => {
-                    console.error(err)
-                })
+            try {
+                const data = await axios.get(getUrlName(args))
+                context.commit(getMutationName(args), data.data.data)
+            } catch (error) {
+                console.error(error.message)
+                throw new Error(error.message)
+            }
         },
 
         searchData(context, args) {
@@ -107,58 +107,58 @@ const store = new Vuex.Store({
             })
         },
         async createData(context, args) {
-            await args.form.post(`${getUrlName(args.modelName)}`)
-                .then(() => {
-                    context.dispatch('fetchData', args.modelName)
-                })
+            try {
+                await args.form.post(`${getUrlName(args.modelName)}`)
+                context.dispatch('fetchData', args.modelName)
+            } catch (error) {
+                console.error(error.message)
+                throw new Error(error.message)
+            }
         },
 
         async updateData(context, args) {
-            await args.form.patch(`${getUrlName(args.modelName)}/${args.id}`)
-                .then(() => {
-                    context.dispatch('fetchData', args.modelName)
-                })
+            try {
+                await args.form.patch(`${getUrlName(args.modelName)}/${args.id}`)
+                context.dispatch('fetchData', args.modelName)
+            } catch (error) {
+                console.error(error.message)
+                throw new Error(error.message)
+            }
         },
 
         async destroyData(context, args) {
-            await axios.delete(getUrlName(args.modelName) + '/' + args.id)
-                .then(() => {
-                    context.dispatch('fetchData', args.modelName)
-                    // resolve(res)
-                })
+            try {
+                await axios.delete(getUrlName(args.modelName) + '/' + args.id)
+                context.dispatch('fetchData', args.modelName)
+            } catch (error) {
+                console.error(error.message)
+                throw new Error(error.message)
+            }
         },
 
-        login(context , args) {
-            return new Promise((resolve, reject) => {
-                args.post('login')
-                    .then(res => {
-                        localStorage.setItem('access_token', res.data.access_token)
-                        let token = res.data.access_token
-                        axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`
-                        context.commit('setToken', res.data.access_token)
-                        context.dispatch('getCurrentUser').then( () => {
-                            resolve(res)
-                        })
-                        .catch( error =>{
-                            reject(error)
-                        })
-                        
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
-            })
+        async login(context , args) {
+            try {
+                const data = await args.post('http://127.0.0.1:8000/api/login')
+                const token = data.data.access_token
+                localStorage.setItem('access_token', token)
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+                context.commit('setToken', token)
+                context.dispatch('getCurrentUser')
+            } catch (error) {
+                console.error(error.message)
+                throw new Error(error.message)
+            }
         },
 
         async logout(context) {
-            await axios.get('logout')
-                .then(() => {
-                    localStorage.removeItem('access_token')
-                    context.commit('setCurrentUser', {})
-                })
-                .catch(err => {
-                    throw new Error(err)
-                })
+            try {
+                await axios.get('logout')
+                localStorage.removeItem('access_token')
+                context.commit('setCurrentUser', {})
+            } catch (error) {
+                console.error(error.message)
+                throw new Error(error.message)
+            }
         },
 
         async getCurrentUser(context) {

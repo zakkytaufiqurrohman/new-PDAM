@@ -11,7 +11,7 @@ Vue.use(ArgonDashboard)
 
 //setting base url for axios
 Axios.defaults.baseURL = process.env.VUE_APP_API_URL
-let token = localStorage.getItem('access_token') 
+const token = localStorage.getItem('access_token')
 Axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`
 
 Vue.filter('currency', (money) => {

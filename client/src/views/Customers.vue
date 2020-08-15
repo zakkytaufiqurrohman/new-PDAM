@@ -9,7 +9,7 @@
             <div class="col-lg-5" slot="stats">
                 <stats-card title="Total Pelanggan"
                             type="gradient-green"
-                            :sub-title="customers.length"
+                            :sub-title="customers.length.toString()"
                             icon="ni ni-money-coins"
                             class="mb-4 mb-xl-0"
                 >
